@@ -28,7 +28,7 @@
                                     id="admin_profile">Update</a>
                             </div>
                             <div class="pull-right">
-                                <a href="{% url 'account_logout' %}" class="btn btn-danger btn-flat">Logout</a>
+                                <a href="/logout" class="btn btn-danger btn-flat">Logout</a>
                             </div>
                         </li>
                     </ul>
