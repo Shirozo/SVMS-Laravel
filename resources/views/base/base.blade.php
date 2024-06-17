@@ -11,40 +11,67 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        .bold{
-          font-weight:bold;
+        .bold {
+            font-weight: bold;
         }
 
-        #candidate_list{
-          margin-top:20px;
+        #candidate_list {
+            margin-top: 20px;
         }
 
-        #candidate_list ul{
-          list-style-type:none;
+        #candidate_list ul {
+            list-style-type: none;
         }
 
-        #candidate_list ul li{
-          margin:0 30px 30px 0;
-          vertical-align:top
+        #candidate_list ul li {
+            margin: 0 30px 30px 0;
+            vertical-align: top
         }
 
-        .clist{
-          margin-left: 20px;
+        .clist {
+            margin-left: 20px;
         }
 
-        .cname{
-          font-size: 25px;
+        .cname {
+            font-size: 25px;
         }
-      </style>
+    </style>
 </head>
 
-<body>
-    @include("base.sidenav")
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        @include('base.navbar')
 
-    <div class="container">
-        @yield('main')
+        @include('base.sidenav')
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>VMS</h1>
+                <ol class="breadcrumb">
+                    <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
+                    <li class="active">Page Title</li>
+                </ol>
+            </section>
+            @yield('main')
+        </div>
     </div>
 
+
+<script>
+    addEventListener("DOMContentLoaded", function() {
+        var url = window.location;
+
+        // for sidebar menu entirely but not cover treeview
+        $('ul.sidebar-menu a').filter(function() {
+            return this.href == url;
+        }).parent().addClass('active');
+
+        // for treeview
+        $('ul.treeview-menu a').filter(function() {
+            return this.href == url;
+        }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
+    });
+</script>
 </body>
 
 </html>
