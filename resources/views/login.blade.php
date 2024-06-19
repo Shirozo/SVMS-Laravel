@@ -18,8 +18,8 @@
                     <form action="/login" method="POST" class="input-width">
                         @csrf
                         <div class="form-group has-feedback">
-                            <input type="text" class="form-control custom-background" name="email"
-                                placeholder="Email" required>
+                            <input type="text" class="form-control custom-background" name="username"
+                                placeholder="Username" required>
                             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                         </div>
                         <div class="form-group has-feedback">
