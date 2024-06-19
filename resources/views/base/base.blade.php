@@ -56,9 +56,14 @@
         </div>
     </div>
 
+    @yield("modal")
+
 
 <script>
-    addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
+
+        $("#example1").DataTable()
+
         var url = window.location;
 
         // for sidebar menu entirely but not cover treeview
@@ -72,6 +77,9 @@
         }).parentsUntil(".sidebar-menu > .treeview-menu").addClass('active');
     });
 </script>
+
+@yield('custom_script')
+
 </body>
 
 </html>
