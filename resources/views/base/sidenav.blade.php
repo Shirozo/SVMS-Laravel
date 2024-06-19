@@ -12,10 +12,10 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">REPORT</li>
             <li>
-                <a href="#"><i class="fa fa-dashboard"></i><span>Dasboard</span></a>
+                <a href="/"><i class="fa fa-dashboard"></i><span>Dasboard</span></a>
             </li>
             <li>
-                <a href="#"><i class="glyphicon glyphicon-lock"></i><span>Votes</span></a>
+                <a href="{{ route('votes') }}"><i class="glyphicon glyphicon-lock"></i><span>Votes</span></a>
             </li>
 
             <li class="header">MANAGE</li>
