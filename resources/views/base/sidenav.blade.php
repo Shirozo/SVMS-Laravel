@@ -20,10 +20,10 @@
 
             <li class="header">MANAGE</li>
             <li>
-                <a href="{{ route("college") }}"><i class="fa fa-university"></i><span>Colleges</span></a>
+                <a href="{{ route('college') }}"><i class="fa fa-university"></i><span>Colleges</span></a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-users"></i><span>Voters</span></a>
+                <a href="{{ route('voters') }}"><i class="fa fa-users"></i><span>Voters</span></a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-tasks"></i><span>Positions</span></a>
