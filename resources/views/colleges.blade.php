@@ -13,32 +13,32 @@
                             <i class="fa fa-minus"></i> Remove College
                         </a>
                     </div>
-                </div>
-                <div class="box-body">
-                    <table id="example1" class="table tablebordered table-hover table-stripped">
-                        <thead style="background: #222D32; color:white">
-                            <th>Course</th>
-                            <th>College</th>
-                            <th>Enrolled Student</th>
-                            <th>Action</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Sample</td>
-                                <td>Data</td>
-                                <td>Rendered</td>
-                                <td>
-                                    <form action="#" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="course_delete" id="course_delete"
-                                            value="custom_value_here">
-                                        <button class="btn btn-danger btn-sm btn-flat"
-                                            data-id="custom_value">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-hover table-striped">
+                            <thead style="background-color: #222D32; color:white;">
+                                <th>Course</th>
+                                <th>College</th>
+                                <th>Enrolled Student</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Sample</td>
+                                    <td>Data</td>
+                                    <td>Rendered</td>
+                                    <td>
+                                        <form action="#" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="course_delete" id="course_delete"
+                                                value="custom_value_here">
+                                            <button class="btn btn-danger btn-sm btn-flat"
+                                                data-id="custom_value">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
