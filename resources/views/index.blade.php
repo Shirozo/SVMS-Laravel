@@ -1,5 +1,9 @@
 @extends('base.base')
 
+@section("title")
+Dashboard
+@endsection
+
 @section('main')
     <div class="content">
         <div class="row">

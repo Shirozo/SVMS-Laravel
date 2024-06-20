@@ -1,5 +1,8 @@
 @extends('base.base')
 
+@section("title")
+Voters
+@endsection
 
 @section('main')
     <section class="content">

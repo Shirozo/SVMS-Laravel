@@ -1,5 +1,9 @@
 @extends('base.base')
 
+@section("title")
+Votes
+@endsection
+
 @section('main')
     <section class="content">
         <div class="row">
