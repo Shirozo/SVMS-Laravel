@@ -9,10 +9,7 @@ class IndexController extends Controller
 {
     public function index() {
 
-        if (Auth::user()) {
-            return view("index");
-        }
+        return view("index");
 
-        return redirect()->intended(route("loginPage"));
     }
 }
