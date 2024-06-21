@@ -13,9 +13,6 @@
                         <a href="#addcollege" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
                             <i class="fa fa-plus"></i> Add College
                         </a>
-                        <a href="#removecollege" data-toggle="modal" class="btn btn-danger btn-sm btn-flat">
-                            <i class="fa fa-minus"></i> Remove College
-                        </a>
                     </div>
                     <div class="box-body">
                         <table id="example1" class="table table-bordered table-hover table-striped">
@@ -30,12 +27,10 @@
                                         <td>{{ $college->college_name }}</td>
                                         <td>0</td>
                                         <td>
-                                            <form action="{{ route('college.destroy', ["id" => $college->id]) }}" method="POST">
-                                                @csrf
-                                                @method("delete")
-                                                <button class="btn btn-danger btn-sm btn-flat"
-                                                    data-id="custom_value">Delete</button>
-                                            </form>
+                                            <a href="#deleteCollege" data-toggle="modal" data-id="{{ $college->id }}"
+                                                data-name="{{ $college->college_name }}" class="btn delete btn-danger btn-sm btn-flat">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,35 +80,48 @@
         </div>
     </div>
 
-    <div class="modal fade" id="removecollege">
+    <div class="modal fade" id="deleteCollege">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title"><b>Remove College</b></h4>
+                    <h4 class="modal-title"><b>Delete College</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" method="POST" action="{% url 'removeCollege' %}">
+                    <form class="form-horizontal" method="POST" action="{{ route('college.destroy') }}">
                         @csrf
+                        @method('delete')
                         <div class="modal-body">
-                            <div class="form-group has-feedback">
-                                <label for="rm_sample">Remove Sample</label>
-                                <select name="" id="rm_sample" class="form-control">
-                                    <option value=""></option>
-                                </select>
-                            </div>
+                            <p class="text-center"><b style="font-size: 20px" id="del-text"></b></p>
+                            <input type="hidden" name="college_del" id="college_del">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i
                                     class="fa fa-close"></i> Close</button>
                             <button type="submit" class="btn btn-success btn-flat" name="add"><i
-                                    class="fa fa-save"></i> Save</button>
+                                    class="fa fa-save"></i> Yes</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('custom_script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $(".delete").on('click', function(e) {
+                e.preventDefault()
+                var data = $(this).data('id')
+                var name = $(this).data('name')
+
+                $("#del-text").html(`Are you sure you want to delete <i>${name.toUpperCase()}</i>?`)
+                $("#college_del").val(data)
+            })
+        })
+    </script>
 @endsection
