@@ -30,10 +30,9 @@
                                         <td>{{ $college->college_name }}</td>
                                         <td>0</td>
                                         <td>
-                                            <form action="#" method="POST">
+                                            <form action="{{ route('college.destroy', ["id" => $college->id]) }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="course_delete" id="{{ $college->id }}"
-                                                    value="custom_value_here">
+                                                @method("delete")
                                                 <button class="btn btn-danger btn-sm btn-flat"
                                                     data-id="custom_value">Delete</button>
                                             </form>
@@ -60,7 +59,7 @@
                     <h4 class="modal-title"><b>Add New College</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="{{ route('college.create') }}" method="POST">
+                    <form class="form-horizontal" action="{{ route('college.store') }}" method="POST">
                         @csrf
                         <div class="modal-body">
                             {{-- *: Important Field Blueprint --}}
