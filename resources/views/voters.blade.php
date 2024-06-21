@@ -1,7 +1,7 @@
 @extends('base.base')
 
-@section("title")
-Voters
+@section('title')
+    Voters
 @endsection
 
 @section('main')
@@ -15,9 +15,6 @@ Voters
                         </a>
                         <a href="#uploaduser" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
                             <i class="fa fa-plus"></i> Upload File
-                        </a>
-                        <a href="#deactivate" data-toggle="modal" class="btn btn-danger btn-sm btn-flat">
-                            <i class="fa fa-ban"></i> Deactivate All User
                         </a>
                     </div>
                     <div class="box-body">
@@ -70,18 +67,76 @@ Voters
                     <form action="#" class="form-horizontal" method="POST">
                         @csrf
                         <div class="modal-body">
-                            {{-- *: This is the form template. Uncomment the span tag to add error message --}}
                             <div class="form-group has-feedback">
-                                <span class="text-danger">Error Message will be here!</span>
-                                <label for="sample_id">Username</label>
-                                <input type="text" name="" id="sample_id" class="form-control">
+                                @error('first_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="first_name">First Name:</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('middle_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="middle_name">Middle Name:</label>
+                                <input type="text" name="middle_name" id="middle_name" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('last_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="last_name">Last Name:</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="email">Username:</label>
+                                <input type="email" name="email" id="email" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('username')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="username">Username:</label>
+                                <input type="text" name="username" id="username" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="password">Password:</label>
+                                <input type="text" name="password" id="password" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('student_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="student_id">Student ID:</label>
+                                <input type="text" name="student_id" id="student_id" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('course')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="course">Course:</label>
+                                <input type="text" name="course" id="course" class="form-control" required>
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('year')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="year">Year Level:</label>
+                                <input type="text" name="year" id="year" class="form-control" required>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
                                 <i class="fa fa-close"></i> Close
                             </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="add" onclick="enableform()">
+                            <button type="button" class="btn btn-success  btn-flat" name="add"
+                                onclick="enableform()">
                                 <i class="fa fa-save"></i> Save
                             </button>
                         </div>
@@ -143,9 +198,71 @@ Voters
                         <div class="modal-body">
                             {{-- *: This is the form template. Uncomment the span tag to add error message --}}
                             <div class="form-group has-feedback">
-                                <span class="text-danger">Error Message will be here!</span>
-                                <label for="sample_id">Username</label>
-                                <input type="text" name="" id="sample_id" class="form-control">
+                                @error('edit_first_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_first_name">First Name:</label>
+                                <input type="text" name="edit_first_name" id="edit_first_name" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_middle_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_middle_name">Middle Name:</label>
+                                <input type="text" name="edit_middle_name" id="edit_middle_name" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_last_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_last_name">Last Name:</label>
+                                <input type="text" name="edit_last_name" id="edit_last_name" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_username')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_username">Username:</label>
+                                <input type="text" name="edit_username" id="edit_username" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_password">Password:</label>
+                                <input type="text" name="edit_password" id="edit_password" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_student_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_student_id">Student ID:</label>
+                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_course')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_course">Course:</label>
+                                <input type="text" name="edit_course" id="edit_course" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('edit_year')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                <label for="edit_year">Year Level:</label>
+                                <input type="text" name="edit_year" id="edit_year" class="form-control">
+                            </div>
+                            <div class="form-group has-feedback">
+                                @error('status')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                                Status:
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+
                             </div>
                         </div>
                         <div class="modal-footer">
