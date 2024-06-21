@@ -47,4 +47,15 @@ class CollegeController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroy($id) {
+        $college_data = College::find($id);
+        $name = $college_data->college_name;
+
+        $college_data->delete();
+
+        toastr(`$name has been deleted successfully!`, Type::SUCCESS);
+
+        return redirect()->route("college.index");
+    }
 }
