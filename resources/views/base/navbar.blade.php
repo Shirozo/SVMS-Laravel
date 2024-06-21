@@ -1,5 +1,5 @@
 <header class="main-header">
-    <a href="#" class="logo">
+    <a href="/" class="logo">
         <span class="logo-mini">VMS</span>
         <span class="logo-lg"><b>Voting Management</span>
     </a>
