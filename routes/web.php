@@ -20,7 +20,7 @@ Route::post("/college", [CollegeController::class, "store"])
     ->middleware('auth')
     ->name("college.store");
 
-Route::delete("college/delete/{id}", [CollegeController::class, "destroy"])
+Route::delete("college/delete/", [CollegeController::class, "destroy"])
     ->middleware("auth")
     ->name("college.destroy");
 
