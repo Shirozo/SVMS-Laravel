@@ -19,7 +19,7 @@ return new class extends Migration
             $table->char("username", 30)->unique();
             $table->char("student_id", 8)->unique();
             $table->enum('user_type', [1, 2, 3]);
-            $table->foreignId("course_id")->constrained(table: "courses", column: "id");
+            $table->foreignId("course_id")->constrained(table: "courses", column: "id")->onUpdate("cascade")->onUpdate('cascade');
             $table->enum("year", [1, 2, 3, 4]);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
