@@ -48,7 +48,9 @@ class CollegeController extends Controller
         }
     }
 
-    public function destroy($id) {
+    public function destroy(Request $request) {
+
+        $id = $request->college_del;
         $college_data = College::find($id);
         $name = $college_data->college_name;
 
