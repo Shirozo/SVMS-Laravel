@@ -23,7 +23,10 @@
                 <a href="{{ route('college.index') }}"><i class="fa fa-university"></i><span>Colleges</span></a>
             </li>
             <li>
-                <a href="{{ route('voters') }}"><i class="fa fa-users"></i><span>Voters</span></a>
+                <a href="{{ route('courses.index') }}"><i class="fa fa-graduation-cap"></i><span>Courses</span></a>
+            </li>
+            <li>
+                <a href="{{ route('voters.index') }}"><i class="fa fa-users"></i><span>Voters</span></a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-tasks"></i><span>Positions</span></a>
