@@ -54,5 +54,8 @@ Route::delete('/voter/delete', [VoterController::class, "destroy"])
 Route::put('/voters/update', [VoterController::class, "update"])
     ->middleware('auth')
     ->name('voters.update');
+Route::get('/voter/user/data/', [VoterController::class, "api"])
+    ->middleware('auth')
+    ->name('voter.api');
 
 require __DIR__ . '/auth.php';
