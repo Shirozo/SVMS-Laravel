@@ -56,7 +56,6 @@
 @endsection
 
 
-{{-- TODO: Add user add url in form --}}
 @section('modal')
     <div class="modal fade" id="addnew">
         <div class="modal-dialog">
@@ -215,6 +214,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title"><b>Edit Voter</b></h4>
+                    <b class="text-danger" id="ajx-error" style="display: none">Can't Find User</b>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('voters.update') }}" class="form-horizontal" method="POST">
@@ -222,58 +222,48 @@
                         @method('put')
                         <div class="modal-body">
                             {{-- *: This is the form template. Uncomment the span tag to add error message --}}
+                            <input type="hidden" name="update_id" id="update_id">
                             <div class="form-group has-feedback">
-                                @error('edit_first_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                                 <label for="edit_first_name">First Name:</label>
                                 <input type="text" name="edit_first_name" id="edit_first_name" class="form-control"
                                     maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_middle_name')
+                                @error('edit_first_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="edit_middle_name">Middle Name:</label>
                                 <input type="text" name="edit_middle_name" id="edit_middle_name" class="form-control"
                                     required maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_last_name')
+                                @error('edit_middle_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="edit_last_name">Last Name:</label>
                                 <input type="text" name="edit_last_name" id="edit_last_name" class="form-control"
                                     required maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_username')
+                                @error('edit_last_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_email">Email:</label>
+                                <input type="text" name="edit_email" id="edit_email" class="form-control"
+                                    required maxlength="30">
+                                @error('edit_email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="edit_username">Username:</label>
                                 <input type="text" name="edit_username" id="edit_username" class="form-control"
                                     required maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_password')
+                                @error('edit_username')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                                <label for="edit_password">Password:</label>
-                                <input type="text" name="edit_password" id="edit_password" class="form-control"
-                                    required maxlength="30" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
-                                @error('edit_student_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                                <label for="edit_student_id">Student ID:</label>
-                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control"
-                                    required maxlength="8" minlength="8">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_course')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                                 <label for="edit_course">Course:</label>
                                 <select type="text" name="edit_course" id="edit_course" class="form-control"
                                     required>
@@ -282,11 +272,11 @@
                                         <option value="{{ $c->id }}">{{ $course->course_name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('edit_year')
+                                @error('edit_course')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="edit_year">Year Level:</label>
                                 <select type="text" name="edit_year" id="edit_year" class="form-control">
                                     <option value="" selected>---------</option>
@@ -295,16 +285,19 @@
                                     <option value="3">3rd Year</option>
                                     <option value="4">4th Year</option>
                                 </select>
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('status')
+                                @error('edit_year')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 Status:
-                                <label class="switch">
-                                    <input type="checkbox">
+                                <label for="edit_status" class="switch">
+                                    <input type="checkbox" id="edit_status" name="edit_status">
                                     <span class="slider round"></span>
                                 </label>
+                                @error('edit_status')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
 
                             </div>
                         </div>
@@ -424,13 +417,31 @@
         function getRow(id) {
             $.ajax({
                 type: "GET",
-                url: "#",
+                url: "{{ route('voter.api') }}",
                 data: {
-                    id: id
+                    voter_id: id
                 },
                 dataType: 'json',
                 success: function(response) {
-                    console.log("Do logic here if request if")
+                    $("#ajx-error").css('display', 'none')
+                    var data = response.data
+                    $("#update_id").val(data.id)
+                    $("#edit_first_name").val(data.first_name)
+                    $("#edit_middle_name").val(data.middle_name)
+                    $("#edit_last_name").val(data.last_name)
+                    $("#edit_username").val(data.username)
+                    $("#edit_email").val(data.email)
+                    $("#edit_student_id").val(data.student_id)
+                    $("#edit_course").val(data.course_id)
+                    $("#edit_year").val(data.year)
+                    if (data.status === 0) {
+                        $("#edit_status").prop('checked', false)
+                    } else {
+                        $("#edit_status").prop('checked', true)
+                    }
+                },
+                error: function(er) {
+                    $("#ajx-error").css('display', 'block')
                 }
             })
         }
