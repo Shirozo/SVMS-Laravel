@@ -34,7 +34,8 @@
                                         <td>{{ $voter->course_id }}</td>
                                         <td>{{ $voter->college_id }}</td>
                                         <td>
-                                            <a href="#edit" data-toggle="modal" class="btn btn-success btn-sm edit btn-flat" data-id="{{ $voter->id }}">
+                                            <a href="#edit" data-toggle="modal"
+                                                class="btn btn-success btn-sm edit btn-flat" data-id="{{ $voter->id }}">
                                                 <i class="fa fa-edit"></i> Edit
                                             </a>
                                             <a href="#delete" data-toggle="modal"
@@ -117,9 +118,12 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="student_id">Student ID:</label>
-                                <input type="text" name="student_id" id="student_id" class="form-control" required>
+                                <input type="text" name="student_id" id="student_id" class="form-control" required
+                                    maxlength="8"
+                                    minlength="8>
                             </div>
-                            <div class="form-group has-feedback">
+                            <div class="form-group
+                                    has-feedback">
                                 @error('course')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -206,8 +210,9 @@
                     <h4 class="modal-title"><b>Edit Voter</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" class="form-horizontal" method="POST">
+                    <form action="{{ route('voters.update') }}" class="form-horizontal" method="POST">
                         @csrf
+                        @method('put')
                         <div class="modal-body">
                             {{-- *: This is the form template. Uncomment the span tag to add error message --}}
                             <div class="form-group has-feedback">
@@ -215,57 +220,62 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_first_name">First Name:</label>
-                                <input type="text" name="edit_first_name" id="edit_first_name" class="form-control">
+                                <input type="text" name="edit_first_name" id="edit_first_name" class="form-control"
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_middle_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_middle_name">Middle Name:</label>
-                                <input type="text" name="edit_middle_name" id="edit_middle_name"
-                                    class="form-control">
+                                <input type="text" name="edit_middle_name" id="edit_middle_name" class="form-control"
+                                    required maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_last_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_last_name">Last Name:</label>
-                                <input type="text" name="edit_last_name" id="edit_last_name" class="form-control">
+                                <input type="text" name="edit_last_name" id="edit_last_name" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_username')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_username">Username:</label>
-                                <input type="text" name="edit_username" id="edit_username" class="form-control">
+                                <input type="text" name="edit_username" id="edit_username" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_password">Password:</label>
-                                <input type="text" name="edit_password" id="edit_password" class="form-control">
+                                <input type="text" name="edit_password" id="edit_password" class="form-control" required
+                                    maxlength="30" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_student_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_student_id">Student ID:</label>
-                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control">
+                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control" required
+                                    maxlength="8" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_course')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_course">Course:</label>
-                                <input type="text" name="edit_course" id="edit_course" class="form-control">
+                                <input type="text" name="edit_course" id="edit_course" class="form-control" required>
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_year')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_year">Year Level:</label>
-                                <input type="text" name="edit_year" id="edit_year" class="form-control">
+                                <input type="text" name="edit_year" id="edit_year" class="form-control" required>
                             </div>
                             <div class="form-group has-feedback">
                                 @error('status')
@@ -283,7 +293,7 @@
                             <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
                                 <i class="fa fa-close"></i> Close
                             </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="edit">
+                            <button type="submit" class="btn btn-success  btn-flat" name="edit">
                                 <i class="fa fa-save"></i> Update
                             </button>
                         </div>
@@ -367,12 +377,11 @@
                 [0, 'asc']
             ]).draw()
 
-            // $(document).on("click", ".edit", function(e) {
-            //     e.preventDefault()
-            //     $("#edit").modal("show")
-            //     var id = $(this).data('id')
-            //     getRow(id)
-            // })
+            $(document).on("click", ".edit", function(e) {
+                e.preventDefault()
+                var id = $(this).data('id')
+                getRow(id)
+            })
 
             $(document).on("click", ".delete", function(e) {
                 e.preventDefault()
@@ -387,42 +396,42 @@
         })
 
 
-        // function enableform() {
-        //     /*enable the form. sample*/
-        //     $("#id_username").prop("disabled", false)
-        // }
+        function enableform() {
+            /*enable the form. sample*/
+            $("#id_username").prop("disabled", false)
+        }
 
-        // // Add url here for API
-        // function getRow(id) {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "#",
-        //         data: {
-        //             id: id
-        //         },
-        //         dataType: 'json',
-        //         success: function(response) {
-        //             console.log("Do logic here if request if")
-        //         }
-        //     })
-        // }
+        // Add url here for API
+        function getRow(id) {
+            $.ajax({
+                type: "GET",
+                url: "#",
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log("Do logic here if request if")
+                }
+            })
+        }
 
-        // function handleDragOver(event) {
-        //     event.preventDefault()
-        //     event.dataTransfer.dropEffect = "copy"
-        // }
+        function handleDragOver(event) {
+            event.preventDefault()
+            event.dataTransfer.dropEffect = "copy"
+        }
 
 
-        // function handleDrop(event) {
-        //     event.preventDefault()
-        //     const file = event.dataTransfer.files;
+        function handleDrop(event) {
+            event.preventDefault()
+            const file = event.dataTransfer.files;
 
-        //     for (let i = 0; i < file.length; i++) {
-        //         console.log("Dropped file", file[i])
-        //     }
+            for (let i = 0; i < file.length; i++) {
+                console.log("Dropped file", file[i])
+            }
 
-        //     const fileInput = document.getElementById("voter_file");
-        //     fileInput.files = file;
-        // }
+            const fileInput = document.getElementById("voter_file");
+            fileInput.files = file;
+        }
     </script>
 @endsection
