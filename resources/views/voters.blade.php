@@ -21,27 +21,30 @@
                         <table id="example1" class="table table-bordered table-hover table-striped">
                             <thead style="background-color: #222D32; color:white;">
                                 <th>Fullname</th>
+                                <th>Username</th>
                                 <th>Course</th>
                                 <th>College</th>
-                                <th>Username</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                {{-- TODO: Voter list will be rendered here. Change the user_id in data-id --}}
-                                <tr>
-                                    <td>Sample</td>
-                                    <td>Data</td>
-                                    <td>Sample</td>
-                                    <td>Sample</td>
-                                    <td>
-                                        <button class="btn btn-success btn-sm edit btn-flat" data-id="user_id">
-                                            <i class="fa fa-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-sm delete btn-flat" data-id="user_id">
-                                            <i class="fa fa-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
+                                @foreach ($voters as $voter)
+                                    <tr>
+                                        <td>{{ $voter->last_name }}, {{ $voter->first_name }}</td>
+                                        <td>{{ $voter->username }}</td>
+                                        <td>{{ $voter->course_id }}</td>
+                                        <td>{{ $voter->college_id }}</td>
+                                        <td>
+                                            <a href="#edit" data-toggle="modal" class="btn btn-success btn-sm edit btn-flat" data-id="{{ $voter->id }}">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                            <a href="#delete" data-toggle="modal"
+                                                class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $voter->id }}"
+                                                data-name="{{ $voter->first_name }} {{ $voter->last_name }}">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -64,7 +67,7 @@
                     <h4 class="modal-title"><b>Add New Voter</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" class="form-horizontal" method="POST">
+                    <form action="{{ route('voters.store') }}" class="form-horizontal" method="POST">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group has-feedback">
@@ -92,7 +95,7 @@
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                                <label for="email">Username:</label>
+                                <label for="email">Email:</label>
                                 <input type="email" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="form-group has-feedback">
@@ -121,22 +124,32 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="course">Course:</label>
-                                <input type="text" name="course" id="course" class="form-control" required>
+                                <select name="course" id="course" required class="form-control">
+                                    <option value="" selected>---------</option>
+                                    @foreach ($courses as $course)
+                                        <option value="{{ $course->id }}">{{ $course->course_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group has-feedback">
                                 @error('year')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="year">Year Level:</label>
-                                <input type="text" name="year" id="year" class="form-control" required>
+                                <select name="year" id="year" required class="form-control">
+                                    <option value="" selected>---------</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
                                 <i class="fa fa-close"></i> Close
                             </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="add"
-                                onclick="enableform()">
+                            <button type="submit" class="btn btn-success  btn-flat" name="add">
                                 <i class="fa fa-save"></i> Save
                             </button>
                         </div>
@@ -209,7 +222,8 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_middle_name">Middle Name:</label>
-                                <input type="text" name="edit_middle_name" id="edit_middle_name" class="form-control">
+                                <input type="text" name="edit_middle_name" id="edit_middle_name"
+                                    class="form-control">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_last_name')
@@ -289,18 +303,18 @@
                     <h4 class="modal-title"><b>Deleting...</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" class="form-horizontal" method="POST">
+                    <form action="{{ route('voters.destroy') }}" class="form-horizontal" method="POST">
                         @csrf
-                        <input type="hidden" class="id" name="id">
-                        <div class="text-center">
-                            <p>DELETE VOTER</p>
-                            <h2 class="bold fullname"></h2>
+                        @method('delete')
+                        <div class="modal-body">
+                            <p class="text-center"><b style="font-size: 20px" id="del-text"></b></p>
+                            <input type="hidden" name="user_del" id="user_del">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
                                 <i class="fa fa-close"></i> Close
                             </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="add">
+                            <button type="submit" class="btn btn-success  btn-flat" name="add">
                                 <i class="fa fa-save"></i> Delete
                             </button>
                         </div>
@@ -353,59 +367,62 @@
                 [0, 'asc']
             ]).draw()
 
-            $(document).on("click", ".edit", function(e) {
-                e.preventDefault()
-                $("#edit").modal("show")
-                var id = $(this).data('id')
-                getRow(id)
-            })
+            // $(document).on("click", ".edit", function(e) {
+            //     e.preventDefault()
+            //     $("#edit").modal("show")
+            //     var id = $(this).data('id')
+            //     getRow(id)
+            // })
 
             $(document).on("click", ".delete", function(e) {
                 e.preventDefault()
-                $("#delete").modal("show")
                 var id = $(this).data('id')
-                getRow(id)
+                var name = $(this).data('name')
+
+                $("#del-text").html(`Are you sure you want to delete <i>${name.toUpperCase()}</i>?`)
+                $("#user_del").val(id)
+
             })
 
         })
 
 
-        function enableform() {
-            /*enable the form. sample*/
-            $("#id_username").prop("disabled", false)
-        }
+        // function enableform() {
+        //     /*enable the form. sample*/
+        //     $("#id_username").prop("disabled", false)
+        // }
 
-        // Add url here for API
-        function getRow(id) {
-            $.ajax({
-                type: "GET",
-                url: "#",
-                data: {
-                    id: id
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log("Do logic here if request if")
-                }
-            })
-        }
+        // // Add url here for API
+        // function getRow(id) {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "#",
+        //         data: {
+        //             id: id
+        //         },
+        //         dataType: 'json',
+        //         success: function(response) {
+        //             console.log("Do logic here if request if")
+        //         }
+        //     })
+        // }
 
-        function handleDragOver(event) {
-            event.preventDefault()
-            event.dataTransfer.dropEffect = "copy"
-        }
+        // function handleDragOver(event) {
+        //     event.preventDefault()
+        //     event.dataTransfer.dropEffect = "copy"
+        // }
 
 
-        function handleDrop(event) {
-            event.preventDefault()
-            const file = event.dataTransfer.files;
+        // function handleDrop(event) {
+        //     event.preventDefault()
+        //     const file = event.dataTransfer.files;
 
-            for (let i = 0; i < file.length; i++) {
-                console.log("Dropped file", file[i])
-            }
+        //     for (let i = 0; i < file.length; i++) {
+        //         console.log("Dropped file", file[i])
+        //     }
 
-            const fileInput = document.getElementById("voter_file");
-            fileInput.files = file;
-        }
+        //     const fileInput = document.getElementById("voter_file");
+        //     fileInput.files = file;
+        // }
     </script>
 @endsection
