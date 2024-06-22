@@ -76,21 +76,24 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="first_name">First Name:</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                                <input type="text" name="first_name" id="first_name" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('middle_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="middle_name">Middle Name:</label>
-                                <input type="text" name="middle_name" id="middle_name" class="form-control" required>
+                                <input type="text" name="middle_name" id="middle_name" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('last_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="last_name">Last Name:</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                                <input type="text" name="last_name" id="last_name" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('email')
@@ -104,14 +107,16 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="username">Username:</label>
-                                <input type="text" name="username" id="username" class="form-control" required>
+                                <input type="text" name="username" id="username" class="form-control" required
+                                    maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="password">Password:</label>
-                                <input type="text" name="password" id="password" class="form-control" required>
+                                <input type="text" name="password" id="password" class="form-control" required
+                                    maxlength="16" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('student_id')
@@ -236,46 +241,58 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_last_name">Last Name:</label>
-                                <input type="text" name="edit_last_name" id="edit_last_name" class="form-control" required
-                                    maxlength="30">
+                                <input type="text" name="edit_last_name" id="edit_last_name" class="form-control"
+                                    required maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_username')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_username">Username:</label>
-                                <input type="text" name="edit_username" id="edit_username" class="form-control" required
-                                    maxlength="30">
+                                <input type="text" name="edit_username" id="edit_username" class="form-control"
+                                    required maxlength="30">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_password">Password:</label>
-                                <input type="text" name="edit_password" id="edit_password" class="form-control" required
-                                    maxlength="30" minlength="8">
+                                <input type="text" name="edit_password" id="edit_password" class="form-control"
+                                    required maxlength="30" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_student_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_student_id">Student ID:</label>
-                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control" required
-                                    maxlength="8" minlength="8">
+                                <input type="text" name="edit_student_id" id="edit_student_id" class="form-control"
+                                    required maxlength="8" minlength="8">
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_course')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_course">Course:</label>
-                                <input type="text" name="edit_course" id="edit_course" class="form-control" required>
+                                <select type="text" name="edit_course" id="edit_course" class="form-control"
+                                    required>
+                                    <option value="" selected>---------</option>
+                                    @foreach ($courses as $c)
+                                        <option value="{{ $c->id }}">{{ $course->course_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group has-feedback">
                                 @error('edit_year')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <label for="edit_year">Year Level:</label>
-                                <input type="text" name="edit_year" id="edit_year" class="form-control" required>
+                                <select type="text" name="edit_year" id="edit_year" class="form-control">
+                                    <option value="" selected>---------</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
                             </div>
                             <div class="form-group has-feedback">
                                 @error('status')
