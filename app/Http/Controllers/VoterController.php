@@ -6,9 +6,11 @@ use App\Models\Course;
 use App\Models\User;
 use Error;
 use Flasher\Prime\Notification\Type;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class VoterController extends Controller
@@ -26,7 +28,8 @@ class VoterController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         try {
             $valid = Validator::make($request->all(), [
@@ -64,8 +67,7 @@ class VoterController extends Controller
 
                 toastr("New Voter Added!", Type::SUCCESS);
                 return redirect()->route("voters.index");
-            }
-            else {
+            } else {
                 toastr("Invalid Course Field!", Type::ERROR);
                 return redirect()->back()->withErrors($valid);
             }
@@ -78,7 +80,89 @@ class VoterController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
+    public function update(Request $request)
+    {
+
+        $valid = Validator::make($request->all(), [
+            "update_id" => 'required',
+            "edit_first_name" => 'required|max:30|min:1',
+            "edit_middle_name" => 'required|max:30|min:1',
+            "edit_last_name" => 'required|max:30|min:1',
+            "edit_email" => 'required|email',
+            "edit_username" => 'required|max:30|min:1',
+            "edit_course" => 'required|numeric',
+            "edit_year" => 'required|numeric|max:4|min:1',
+        ]);
+
+        if ($valid->fails()) {
+            toastr("Form validation error!", Type::ERROR);
+            return redirect()->back()->withErrors($valid);
+        }
+
+        $user_data = User::find($request->update_id);
+
+        if ($user_data == null) {
+            toastr("Can't find voter data!", Type::ERROR);
+            return redirect()->back()->withErrors($valid);
+        }
+
+        if ($request->edit_password != null) {
+            if (strlen($request->edit_password) >= 8 && strlen($request->edit_password) <= 16) {
+                $password = Hash::make($request->edit_password);
+            }
+            else {
+                toastr("Password should consist of 8-16 character!", Type::ERROR);
+                return redirect()->back()->withErrors($valid);
+            }
+        }
+        else {
+            $password = $user_data->password;
+        }
+
+        $status = array(
+            "on" => 1,
+            "" => 0
+        );
+
+
+
+        $user_data->update([
+            "first_name" => $request->edit_first_name,
+            "middle_name" => $request->edit_middle_name,
+            "last_name" => $request->edit_last_name,
+            "email" => $request->edit_email,
+            "username" => $request->edit_username,
+            "password" => $password,
+            "course_id" => $request->edit_course,
+            "year" => $request->edit_year,
+            "status" => $status[$request->edit_status],
+            'remember_token' => Str::random(60)
+        ]);
+
+        event(new PasswordReset($user_data));
+
+        toastr("Voter Updated!", Type::SUCCESS);
+        return redirect()->route('voters.index');
+
+    }
+
+    public function api(Request $request) {
+        $id = $request->voter_id;
+        $data = User::find($id);
+
+        if ($data != null) {
+            return response()->json([
+                "data" => $data
+            ], 200);
+        }
+
+        return response()->json([
+            "message" => "Unkown Voter!",
+        ], 404);
+    }
+
+    public function destroy(Request $request)
+    {
         $user_id = $request->user_del;
         $user_data = User::find($user_id);
 
@@ -86,13 +170,10 @@ class VoterController extends Controller
 
             $user_data->delete();
             toastr("User has been deleted!", Type::SUCCESS);
-        }
-        else {
+        } else {
             toastr("User is not registered!", Type::ERROR);
         }
 
         return redirect()->route("voters.index");
     }
-
-
 }
