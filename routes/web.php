@@ -45,5 +45,8 @@ Route::get("/voters", [VoterController::class, "index"])->name("voters.index")
 Route::post('/voters/sign-up', [VoterController::class, "store"])
     ->middleware('auth')
     ->name('voters.store');
+Route::delete('/voter/delete', [VoterController::class, "destroy"])
+    ->middleware('auth')
+    ->name('voters.destroy');
 
 require __DIR__ . '/auth.php';
