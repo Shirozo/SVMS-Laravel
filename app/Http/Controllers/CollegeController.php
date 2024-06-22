@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\College;
+use Error;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -48,15 +49,21 @@ class CollegeController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
 
         $id = $request->college_del;
         $college_data = College::find($id);
-        $name = $college_data->college_name;
 
-        $college_data->delete();
+        if ($college_data != null) {
+            $name = $college_data->college_name;
 
-        toastr(`$name has been deleted successfully!`, Type::SUCCESS);
+            $college_data->delete();
+
+            toastr(`$name has been deleted successfully!`, Type::SUCCESS);
+        } else {
+            toastr("Course not found!", Type::ERROR);
+        }
 
         return redirect()->route("college.index");
     }
