@@ -44,8 +44,10 @@ class LoginRequest extends FormRequest
 
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
-             toastr("Invalid Credential!", Type::ERROR);
+            toastr(__('auth.failed'), Type::ERROR);
+            throw ValidationException::withMessages([
+                'username' => __('auth.failed'),
+            ]);
         }
 
         RateLimiter::clear($this->throttleKey());
