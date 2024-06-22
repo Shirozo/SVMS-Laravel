@@ -53,4 +53,22 @@ class CoursesController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroy(Request $request) {
+
+        $course_id = $request->course_del;
+        $course_data = Course::find($course_id);
+
+        if ($course_data != null) {
+            $course_data->delete();
+
+            toastr("Course Deleted!", Type::SUCCESS);
+        }
+        else {
+            toastr("Course not found!", Type::ERROR);
+        }
+
+        return redirect()->route('courses.index');
+
+    }
 }
