@@ -8,6 +8,9 @@ use App\Http\Controllers\VoterController;
 use App\Models\College;
 use Illuminate\Support\Facades\Route;
 
+
+// TODO: Add Gate Rules after full implementation
+
 Route::get('/', [IndexController::class, "index"])->name("index")
     ->middleware('auth');
 
@@ -48,5 +51,8 @@ Route::post('/voters/sign-up', [VoterController::class, "store"])
 Route::delete('/voter/delete', [VoterController::class, "destroy"])
     ->middleware('auth')
     ->name('voters.destroy');
+Route::put('/voters/update', [VoterController::class, "update"])
+    ->middleware('auth')
+    ->name('voters.update');
 
 require __DIR__ . '/auth.php';
