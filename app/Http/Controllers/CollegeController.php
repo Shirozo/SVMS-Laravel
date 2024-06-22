@@ -31,7 +31,7 @@ class CollegeController extends Controller
             if ($valid->fails()) {
                 $er = $valid->errors()->get("college");
                 toastr($er[0], Type::ERROR);
-                return redirect()->back();
+                return redirect()->back()->withErrors($valid);
             }
 
             $new_college = College::create(
