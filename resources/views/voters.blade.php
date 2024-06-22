@@ -72,66 +72,65 @@
                         @csrf
                         <div class="modal-body">
                             <div class="form-group has-feedback">
-                                @error('first_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                                 <label for="first_name">First Name:</label>
                                 <input type="text" name="first_name" id="first_name" class="form-control" required
                                     maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('middle_name')
+                                @error('first_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="middle_name">Middle Name:</label>
                                 <input type="text" name="middle_name" id="middle_name" class="form-control" required
                                     maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('last_name')
+                                @error('middle_name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+
                                 <label for="last_name">Last Name:</label>
                                 <input type="text" name="last_name" id="last_name" class="form-control" required
                                     maxlength="30">
+                                @error('last_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="form-group has-feedback">
+
+                                <label for="email">Email:</label>
+                                <input type="email" name="email" id="email" class="form-control" required>
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                                <label for="email">Email:</label>
-                                <input type="email" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="form-group has-feedback">
-                                @error('username')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+
                                 <label for="username">Username:</label>
                                 <input type="text" name="username" id="username" class="form-control" required
                                     maxlength="30">
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('password')
+                                @error('username')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="password">Password:</label>
                                 <input type="text" name="password" id="password" class="form-control" required
                                     maxlength="16" minlength="8">
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="form-group has-feedback">
+                                <label for="student_id">Student ID:</label>
+                                <input type="text" name="student_id" id="student_id" class="form-control" required
+                                    maxlength="8" minlength="8">
                                 @error('student_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
-                                <label for="student_id">Student ID:</label>
-                                <input type="text" name="student_id" id="student_id" class="form-control" required
-                                    maxlength="8"
-                                    minlength="8>
                             </div>
                             <div class="form-group
                                     has-feedback">
-                                @error('course')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                                 <label for="course">Course:</label>
                                 <select name="course" id="course" required class="form-control">
                                     <option value="" selected>---------</option>
@@ -139,11 +138,11 @@
                                         <option value="{{ $course->id }}">{{ $course->course_name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="form-group has-feedback">
-                                @error('year')
+                                @error('course')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="form-group has-feedback">
                                 <label for="year">Year Level:</label>
                                 <select name="year" id="year" required class="form-control">
                                     <option value="" selected>---------</option>
@@ -152,6 +151,9 @@
                                     <option value="3">3rd Year</option>
                                     <option value="4">4th Year</option>
                                 </select>
+                                @error('year')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="modal-footer">
