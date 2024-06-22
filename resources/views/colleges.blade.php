@@ -60,7 +60,7 @@
                             {{-- *: Important Field Blueprint --}}
                             <div class="form-group has-feedback">
                                 <label for="college">College:</label>
-                                <input type="text" name="college" id="college" class="form-control" required>
+                                <input type="text" name="college" id="college" class="form-control" max="100" required>
                                 @error('college')
                                     <span class="text-danger"> {{ $message }} </span>
                                 @enderror
