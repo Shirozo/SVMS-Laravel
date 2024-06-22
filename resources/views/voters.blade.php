@@ -24,7 +24,7 @@
                                 <th>Username</th>
                                 <th>Course</th>
                                 <th>College</th>
-                                <th>Action</th>
+                                <th style="width: 25% !important">Action</th>
                             </thead>
                             <tbody>
                                 @foreach ($voters as $voter)
@@ -249,8 +249,7 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="edit_email">Email:</label>
-                                <input type="text" name="edit_email" id="edit_email" class="form-control"
-                                    required maxlength="30">
+                                <input type="text" name="edit_email" id="edit_email" class="form-control" required>
                                 @error('edit_email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -260,6 +259,14 @@
                                 <input type="text" name="edit_username" id="edit_username" class="form-control"
                                     required maxlength="30">
                                 @error('edit_username')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_password">Password:</label>
+                                <input type="text" name="edit_password" id="edit_password" class="form-control"
+                                    maxlength="16">
+                                @error('edit_password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
