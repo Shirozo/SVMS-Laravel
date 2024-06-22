@@ -19,11 +19,12 @@ return new class extends Migration
             $table->char("username", 30)->unique();
             $table->char("student_id", 8)->unique();
             $table->enum('user_type', [1, 2, 3]);
-            $table->foreignId("course_id")->constrained(table: "courses", column: "id")->onUpdate("cascade")->onUpdate('cascade');
-            $table->enum("year", [1, 2, 3, 4]);
+            $table->foreignId("course_id")->nullable()->constrained(table: "courses", column: "id")->onUpdate("cascade")->onDelete('cascade');
+            $table->enum("year", [1, 2, 3, 4])->nullable();
+            $table->enum("status", [0, 1])->default(1);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->char('password', 16);
+            $table->text('password');
             $table->rememberToken();
             $table->timestamps();
         });
