@@ -37,7 +37,7 @@ Route::post("/courses", [CoursesController::class, "store"])
     ->name('courses.store');
 Route::delete("/course/destroy", [CoursesController::class, "destroy"])
     ->middleware('auth')
-    ->name('course.destroy');
+    ->name('courses.destroy');
 
 
 Route::get("/voters", [VoterController::class, "index"])->name("voters.index")
