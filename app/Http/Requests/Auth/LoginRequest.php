@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use Flasher\Prime\Notification\Type;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -44,9 +45,7 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'username' => __('auth.failed'),
-            ]);
+             toastr("Invalid Credential!", Type::ERROR);
         }
 
         RateLimiter::clear($this->throttleKey());
