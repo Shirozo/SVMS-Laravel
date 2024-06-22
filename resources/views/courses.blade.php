@@ -103,7 +103,7 @@
                     <h4 class="modal-title"><b>Delete Course</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('college.destroy') }}">
+                    <form class="form-horizontal" method="POST" action="{{ route('courses.destroy') }}">
                         @csrf
                         @method('delete')
                         <div class="modal-body">
