@@ -26,7 +26,7 @@
                                 @foreach ($courses as $course)
                                     <tr>
                                         <td>{{ $course->course_name }}</td>
-                                        <td>0</td>
+                                        <td>{{ $course->count }}</td>
                                         <td>
                                             <a href="#deletecourse" data-toggle="modal" data-id="{{ $course->id }}"
                                                 data-name="{{ $course->course_name }}" class="btn delete btn-danger btn-sm btn-flat">
