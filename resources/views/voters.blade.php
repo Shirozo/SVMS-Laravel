@@ -29,10 +29,10 @@
                             <tbody>
                                 @foreach ($voters as $voter)
                                     <tr>
-                                        <td>{{ $voter->last_name }}, {{ $voter->first_name }}</td>
+                                        <td>{{ $voter->fullname }}</td>
                                         <td>{{ $voter->username }}</td>
-                                        <td>{{ $voter->course_id }}</td>
-                                        <td>{{ $voter->college_id }}</td>
+                                        <td>{{ $voter->course_name }}</td>
+                                        <td>{{ $voter->college_name }}</td>
                                         <td>
                                             <a href="#edit" data-toggle="modal"
                                                 class="btn btn-success btn-sm edit btn-flat" data-id="{{ $voter->id }}">
@@ -40,7 +40,7 @@
                                             </a>
                                             <a href="#delete" data-toggle="modal"
                                                 class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $voter->id }}"
-                                                data-name="{{ $voter->first_name }} {{ $voter->last_name }}">
+                                                data-name="{{ $voter->fullname }}">
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         </td>
@@ -392,8 +392,8 @@
             var table = $("#example1").DataTable()
 
             table.order([
-                [1, 'asc'],
-                [0, 'asc']
+                [0, 'asc'],
+                [1, 'asc']
             ]).draw()
 
             $(document).on("click", ".edit", function(e) {
