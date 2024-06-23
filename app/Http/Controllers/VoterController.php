@@ -9,6 +9,7 @@ use Flasher\Prime\Notification\Type;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,16 @@ class VoterController extends Controller
     {
 
         // TODO: Change voters to custom query
-        $voters = User::all();
+        $voters = DB::table("users")
+            ->select(DB::raw("users.id,
+                users.username,
+                courses.course_name, colleges.college_name,
+                CONCAT(users.last_name, ', ', users.first_name, ' ' , users.middle_name) AS fullname "))
+            ->join("courses", "users.course_id", "=", "courses.id")
+            ->join("colleges", "courses.college_id", "colleges.id")
+            ->where('users.user_type', "!=", "1")
+            ->get();
+
         $courses = Course::all();
 
         return view("voters", [
@@ -109,13 +119,11 @@ class VoterController extends Controller
         if ($request->edit_password != null) {
             if (strlen($request->edit_password) >= 8 && strlen($request->edit_password) <= 16) {
                 $password = Hash::make($request->edit_password);
-            }
-            else {
+            } else {
                 toastr("Password should consist of 8-16 character!", Type::ERROR);
                 return redirect()->back()->withErrors($valid);
             }
-        }
-        else {
+        } else {
             $password = $user_data->password;
         }
 
@@ -143,10 +151,10 @@ class VoterController extends Controller
 
         toastr("Voter Updated!", Type::SUCCESS);
         return redirect()->route('voters.index');
-
     }
 
-    public function api(Request $request) {
+    public function api(Request $request)
+    {
         $id = $request->voter_id;
         $data = User::find($id);
 
