@@ -66,5 +66,8 @@ Route::get('/positions', [PositionsController::class, "index"])
 Route::post('/positions/create', [PositionsController::class, "store"])
     ->middleware('auth')
     ->name('positions.store');
+Route::delete("/positions/delete", [PositionsController::class, "destroy"])
+    ->middleware("auth")
+    ->name("positions.destroy");
 
 require __DIR__ . '/auth.php';
