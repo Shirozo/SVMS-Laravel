@@ -7,6 +7,7 @@ use Error;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CollegeController extends Controller
@@ -14,7 +15,12 @@ class CollegeController extends Controller
     public function show()
     {
 
-        $colleges = College::all();
+        $colleges = DB::table("colleges")
+            ->select(DB::raw("colleges.id, colleges.college_name, COUNT(users.id) AS count"))
+            ->leftJoin("courses", "colleges.id", "=", "courses.college_id")
+            ->leftJoin("users", "users.course_id", "=", "courses.id")
+            ->groupBy("colleges.id", "colleges.college_name")
+            ->get();
 
         return view("colleges", [
             "colleges" => $colleges

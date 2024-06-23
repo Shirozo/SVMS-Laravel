@@ -7,6 +7,7 @@ use App\Models\Course;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CoursesController extends Controller
@@ -14,7 +15,11 @@ class CoursesController extends Controller
     public function index()
     {
 
-        $courses = Course::all();
+        $courses = DB::table('courses')
+            ->select(DB::raw("courses.id, courses.course_name, COUNT(users.id) AS count"))
+            ->leftJoin("users", "courses.id", "=", "users.course_id")
+            ->groupBy("courses.id", "courses.course_name")
+            ->get();
         $colleges = College::all();
         return view('courses', [
             "courses" => $courses,
