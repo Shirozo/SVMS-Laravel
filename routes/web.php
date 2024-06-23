@@ -69,5 +69,11 @@ Route::post('/positions/create', [PositionsController::class, "store"])
 Route::delete("/positions/delete", [PositionsController::class, "destroy"])
     ->middleware("auth")
     ->name("positions.destroy");
+Route::get("/positions/data", [PositionsController::class, "api"])
+    ->middleware("auth")
+    ->name("positions.api");
+Route::put("/positions/update", [PositionsController::class, "update"])
+    ->middleware("auth")
+    ->name("positions.update");
 
 require __DIR__ . '/auth.php';
