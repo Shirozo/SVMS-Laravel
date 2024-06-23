@@ -29,7 +29,7 @@
                 <a href="{{ route('voters.index') }}"><i class="fa fa-users"></i><span>Voters</span></a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-tasks"></i><span>Positions</span></a>
+                <a href="{{ route('positions.index') }}"><i class="fa fa-tasks"></i><span>Positions</span></a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-black-tie"></i><span>Election</span></a>
