@@ -23,7 +23,7 @@ Route::get('/vote', [VoteController::class, "votes"])->name("votes")
 Route::get("/college", [CollegeController::class, "show"])->name("college.index")
     ->middleware('auth');
 // ->middleware('can:Gatename'); For Auth
-Route::post("/college", [CollegeController::class, "store"])
+Route::post("/college/create", [CollegeController::class, "store"])
     ->middleware('auth')
     ->name("college.store");
 
@@ -33,7 +33,7 @@ Route::delete("college/delete/", [CollegeController::class, "destroy"])
 
 
 
-Route::get("/courses", [CoursesController::class, "index"])
+Route::get("/courses/create", [CoursesController::class, "index"])
     ->middleware("auth")
     ->name("courses.index");
 Route::post("/courses", [CoursesController::class, "store"])
@@ -63,5 +63,8 @@ Route::get('/voter/user/data/', [VoterController::class, "api"])
 Route::get('/positions', [PositionsController::class, "index"])
     ->middleware('auth')
     ->name('positions.index');
+Route::post('/positions/create', [PositionsController::class, "store"])
+    ->middleware('auth')
+    ->name('positions.store');
 
 require __DIR__ . '/auth.php';
