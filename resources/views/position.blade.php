@@ -58,7 +58,7 @@
                     <h4 class="modal-title"><b>Add new</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" class="form-horizontal">
+                    <form action="{{ route('positions.store') }}" method="POST" class="form-horizontal">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group has-feedback">
