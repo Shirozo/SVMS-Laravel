@@ -51,4 +51,22 @@ class PositionsController extends Controller
             return redirect()->back();
         }
     }
+
+    public function destroy(Request $request) {
+
+        $id = $request->p_id_del;
+
+        $data = Position::find($id);
+
+        if ($data != null) {
+            $data->delete();
+            toastr("Position Deleted!", Type::SUCCESS);
+        }
+        else {
+            toastr("Position Desn't exist!", Type::ERROR);
+
+        }
+
+        return redirect()->route('positions.index');
+    }
 }
