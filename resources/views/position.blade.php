@@ -31,10 +31,10 @@
                                         <td>{{ $position->priority }}</td>
                                         <td>
                                             {{-- TODO: Change data id --}}
-                                            <button class="btn btn-primary btn-sm edit btn-flat"
+                                            <a href="#editPosition" data-toggle="modal" class="btn btn-primary btn-sm edit btn-flat"
                                                 data-id="{{ $position->id }}">
                                                 <i class="fa fa-edit"></i> Edit
-                                            </button>
+                                        </a>
                                             <a href="#deletemodal" data-toggle="modal" data-name="{{ $position->name }}"
                                                 class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $position->id }}">
                                                 <i class="fa fa-trash"></i> Delete
@@ -108,6 +108,65 @@
     </div>
 
 
+    <div class="modal fade" id="editPosition">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"><b>Edit Position</b></h4>
+                    <b class="text-danger" id="ajx-error" style="display: none">Can't Find User</b>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('positions.update') }}" method="POST" class="form-horizontal">
+                        @csrf
+                        @method("put")
+                        <input type="hidden" name="up_p_id" id="up_p_id">
+                        <div class="modal-body">
+                            <div class="form-group has-feedback">
+                                <label for="edit_name">Name: </label>
+                                <input type="text" name="name" id="edit_name" required maxlength="50"
+                                    class="form-control">
+                                @error('name')
+                                    <span class="text-danger"> {{ $message }}|</span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_max_vote">Max Vote: </label>
+                                <input type="number" name="max_vote" id="edit_max_vote" required min="1"
+                                    class="form-control">
+                                @error('max_vote')
+                                    <span class="text-danger"> {{ $message }}|</span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_exclusive">Choose Yes if it is a exclusive for certain College or Course:
+                                </label>
+                                <select name="exclusive" id="edit_exclusive" required class="form-control">
+                                    <option value="1">Yes</option>
+                                    <option value="0" selected>No</option>
+                                </select>
+                                @error('exclusive')
+                                    <span class="text-danger"> {{ $message }}|</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal">
+                                <i class="fa fa-close"></i> Close
+                            </button>
+                            <button type="submit" class="btn btn-success btn-flat" name="add">
+                                <i class="fa fa-save"></i> Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal fade" id="deletemodal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -120,7 +179,7 @@
                 <div class="modal-body">
                     <form action="{{ route('positions.destroy') }}" method="POST" class="form-horizontal">
                         @csrf
-                        @method("delete")
+                        @method('delete')
                         <div class="modal-body">
                             <p class="text-center"><b style="font-size: 20px" id="del-text"></b></p>
                             <input type="hidden" name="p_id_del" id="p_id_del">
@@ -154,10 +213,40 @@
                 var name = $(this).data("name")
                 var id = $(this).data("id")
 
-                $("#del-text").html(`Are you sure you want to delete <i>${name.toUpperCase()}</i> position?`)
+                $("#del-text").html(
+                    `Are you sure you want to delete <i>${name.toUpperCase()}</i> position?`)
                 $("#p_id_del").val(id)
             })
 
+            $(".edit").on("click", function(e) {
+                e.preventDefault()
+                var id = $(this).data("id")
+                getRow(id)
+            })
+
         })
+
+        function getRow(id) {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('positions.api') }}",
+                data: {
+                    p_id: id
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $("#ajx-error").css('display', 'none')
+                    var data = response.data
+                    $("#up_p_id").val(data.id)
+                    $("#edit_name").val(data.name)
+                    $("#edit_max_vote").val(data.max_vote)
+                    $("#edit_exclusive").val(data.exclusive)
+
+                },
+                error: function(er) {
+                    $("#ajx-error").css('display', 'block')
+                }
+            })
+        }
     </script>
 @endsection
