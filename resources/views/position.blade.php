@@ -31,12 +31,14 @@
                                         <td>{{ $position->priority }}</td>
                                         <td>
                                             {{-- TODO: Change data id --}}
-                                            <button class="btn btn-primary btn-sm edit btn-flat" data-id="{{ $position->id }}">
+                                            <button class="btn btn-primary btn-sm edit btn-flat"
+                                                data-id="{{ $position->id }}">
                                                 <i class="fa fa-edit"></i> Edit
                                             </button>
-                                            <button class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $position->id }}">
+                                            <a href="#deletemodal" data-toggle="modal" data-name="{{ $position->name }}"
+                                                class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $position->id }}">
                                                 <i class="fa fa-trash"></i> Delete
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -104,6 +106,38 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="deletemodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"><b>Delete Position</b></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('positions.destroy') }}" method="POST" class="form-horizontal">
+                        @csrf
+                        @method("delete")
+                        <div class="modal-body">
+                            <p class="text-center"><b style="font-size: 20px" id="del-text"></b></p>
+                            <input type="hidden" name="p_id_del" id="p_id_del">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal">
+                                <i class="fa fa-close"></i> Close
+                            </button>
+                            <button type="submit" class="btn btn-success btn-flat" name="add">
+                                <i class="fa fa-save"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('custom_script')
@@ -114,6 +148,15 @@
             table.order([
                 [2, 'asc'],
             ]).draw()
+
+            $(".delete").on("click", function(e) {
+                e.preventDefault()
+                var name = $(this).data("name")
+                var id = $(this).data("id")
+
+                $("#del-text").html(`Are you sure you want to delete <i>${name.toUpperCase()}</i> position?`)
+                $("#p_id_del").val(id)
+            })
 
         })
     </script>
