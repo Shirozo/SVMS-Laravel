@@ -24,20 +24,22 @@
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Sample</td>
-                                    <td>Data</td>
-                                    <td>Here</td>
-                                    <td>
-                                        {{-- TODO: Change data id --}}
-                                        <button class="btn btn-primary btn-sm edit btn-flat" data-id="changer">
-                                            <i class="fa fa-edit"></i> Edit
-                                        </button>
-                                        <button class="btn btn-danger btn-sm delete btn-flat" data-id="chnage">
-                                            <i class="fa fa-trash"></i> Delete
-                                        </button>
-                                    </td>
-                                </tr>
+                                @foreach ($positions as $position)
+                                    <tr>
+                                        <td>{{ $position->name }}</td>
+                                        <td>{{ $position->max_vote }}</td>
+                                        <td>{{ $position->priority }}</td>
+                                        <td>
+                                            {{-- TODO: Change data id --}}
+                                            <button class="btn btn-primary btn-sm edit btn-flat" data-id="{{ $position->id }}">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </button>
+                                            <button class="btn btn-danger btn-sm delete btn-flat" data-id="{{ $position->id }}">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -107,6 +109,11 @@
 @section('custom_script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            var table = $("#example1").DataTable()
+
+            table.order([
+                [2, 'asc'],
+            ]).draw()
 
         })
     </script>
