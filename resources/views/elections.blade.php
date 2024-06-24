@@ -71,12 +71,61 @@
                 <div class="modal-body">
                     <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="#">
 
-
                         <div class="modal-body">
                             <div class="form-group has-feedback">
-                                <span class="text-danger"></span>
+                                <label for="title">Election Title: </label>
+                                <input type="text" name="title" id="title" required maxlength="50"
+                                    class="form-control">
+                                @error('title')
+                                    <span class="text-danger"></span>
+                                @enderror
                             </div>
-
+                            <div class="form-group has-feedback">
+                                <label for="scope">Scope: </label>
+                                <select type="text" name="scope" id="scope" required" class="form-control">
+                                    <option value="" selected>-------</option>
+                                    <option value="1">University</option>
+                                    <option value="2">College</option>
+                                    <option value="3">Program</option>
+                                </select>
+                                @error('scope')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback" id="colege_selection" style="display: none">
+                                <label for="college_limit">College Limit: </label>
+                                <select type="text" name="college_limit" id="college_limit" required"
+                                    class="form-control">
+                                    <option value="" selected>-------</option>
+                                    {{-- TODO: LOOP all colleges --}}
+                                </select>
+                                @error('college_limit')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback" id="course_selection" style="display: none">
+                                <label for="course_limit">Course Limit: </label>
+                                <select type="text" name="course_limit" id="course_limit" required" class="form-control">
+                                    <option value="" selected>-------</option>
+                                    {{-- TODO: LOOP valid course --}}
+                                </select>
+                                @error('course_limit')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback" id="year_selection" style="display: none">
+                                <label for="year_limit">Year Level Limit: </label>
+                                <select type="text" name="year_limit" id="year_limit" required" class="form-control">
+                                    <option value="" selected>-------</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
+                                @error('scope')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
 
                         </div>
                         <div class="modal-footer">
@@ -172,4 +221,31 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('custom_script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $("#scope").on("change", function(e) {
+                var selected = $(this).val()
+                if (+selected === 1) {
+                    $("#colege_selection").css('display', 'none')
+                    $("#course_selection").css('display', 'none')
+                    $("#year_selection").css('display', 'none')
+                } else if (+selected === 2) {
+                    $("#colege_selection").css('display', 'block')
+                    $("#course_selection").css('display', 'none')
+                    $("#year_selection").css('display', 'none')
+                } else if (+selected === 3) {
+                    $("#course_selection").css('display', 'block')
+                    $("#year_selection").css('display', 'block')
+                    $("#colege_selection").css('display', 'none')
+                } else {
+                    $("#colege_selection").css('display', 'none')
+                    $("#course_selection").css('display', 'none')
+                    $("#year_selection").css('display', 'none')
+                }
+            })
+        })
+    </script>
 @endsection
