@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\ElectionsController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\VoteController;
@@ -75,5 +76,10 @@ Route::get("/positions/data", [PositionsController::class, "api"])
 Route::put("/positions/update", [PositionsController::class, "update"])
     ->middleware("auth")
     ->name("positions.update");
+
+
+Route::get("/elections", [ElectionsController::class, "index"])
+    ->middleware('auth')
+    ->name('elections.index');
 
 require __DIR__ . '/auth.php';
