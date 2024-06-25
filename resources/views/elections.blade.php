@@ -23,33 +23,48 @@
                                 <th style="width: 30%"></th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        {{-- TODO: Change HREF --}}
-                                        <a href="#" style="text-decoration: none;color:black;">
-                                            Election name
-                                        </a>
-                                    </td>
-                                    <td>Data</td>
-                                    <td>
-                                        {{-- TODO: Change data-id --}}
-                                        <a href="#deletemodal" data-toggle="modal"
-                                            class="btn btn-danger btn-sm delete btn-flat" data-id="elec_id here"
-                                            data-name="elec_name">
-                                            <i class="fa fa-trash"></i> Delete
-                                        </a>
-                                        {{-- TODO: Do logic on which to show --}}
-                                        <a href="#startmodal" data-toggle="modal"
-                                            class="btn btn-success btn-sm start btn-flat" data-id="elec_id_here"
-                                            data-name="elec_name">
-                                            <i class="fa fa-play"></i> Start
-                                        </a>
-                                        <a href="#stopmodal" data-toggle="modal" class="btn btn-danger btn-sm stop btn-flat"
-                                            data-id="elec_id_here" data-name="elec_name">
-                                            <i class="fa fa-stop"></i> Stop
-                                        </a>
-                                    </td>
-                                </tr>
+                                @foreach ($elections as $election)
+                                    <tr>
+                                        <td>
+                                            {{-- TODO: Change HREF --}}
+                                            <a href="#" style="text-decoration: none;color:black;">
+                                                {{ $election->title }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if ($election->scope == 1)
+                                                University
+                                            @elseif ($election->scope == 2)
+                                                {{ $election->college_limit }}
+                                            @elseif ($election->scope == 3)
+                                                {{ $election->course_limit }} - {{ ordinal($election->year_level_limit) }}
+                                                Year
+                                            @else
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{-- TODO: Change data-id --}}
+                                            <a href="#deletemodal" data-toggle="modal"
+                                                class="btn btn-danger btn-sm delete btn-flat" data-id="elec_id here"
+                                                data-name="elec_name">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                            @if ($election->started == true)
+                                                <a href="#stopmodal" data-toggle="modal"
+                                                    class="btn btn-danger btn-sm stop btn-flat" data-id="elec_id_here"
+                                                    data-name="elec_name">
+                                                    <i class="fa fa-stop"></i> Stop
+                                                </a>
+                                            @else
+                                                <a href="#startmodal" data-toggle="modal"
+                                                    class="btn btn-success btn-sm start btn-flat" data-id="elec_id_here"
+                                                    data-name="elec_name">
+                                                    <i class="fa fa-play"></i> Start
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -69,8 +84,9 @@
                     <h4 class="modal-title"><b>Add New Election</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="#">
-
+                    <form class="form-horizontal" enctype="multipart/form-data" method="POST"
+                        action="{{ route('elections.store') }}">
+                        @csrf
                         <div class="modal-body">
                             <div class="form-group has-feedback">
                                 <label for="title">Election Title: </label>
@@ -82,7 +98,7 @@
                             </div>
                             <div class="form-group has-feedback">
                                 <label for="scope">Scope: </label>
-                                <select type="text" name="scope" id="scope" required" class="form-control">
+                                <select type="text" name="scope" id="scope" required class="form-control">
                                     <option value="" selected>-------</option>
                                     <option value="1">University</option>
                                     <option value="2">College</option>
@@ -94,10 +110,11 @@
                             </div>
                             <div class="form-group has-feedback" id="colege_selection" style="display: none">
                                 <label for="college_limit">College Limit: </label>
-                                <select type="text" name="college_limit" id="college_limit" required"
-                                    class="form-control">
+                                <select type="text" name="college_limit" id="college_limit" class="form-control">
                                     <option value="" selected>-------</option>
-                                    {{-- TODO: LOOP all colleges --}}
+                                    @foreach ($colleges as $college)
+                                        <option value="{{ $college->id }}">{{ $college->college_name }}</option>
+                                    @endforeach
                                 </select>
                                 @error('college_limit')
                                     <span class="text-danger"></span>
@@ -105,9 +122,11 @@
                             </div>
                             <div class="form-group has-feedback" id="course_selection" style="display: none">
                                 <label for="course_limit">Course Limit: </label>
-                                <select type="text" name="course_limit" id="course_limit" required" class="form-control">
+                                <select type="text" name="course_limit" id="course_limit" class="form-control">
                                     <option value="" selected>-------</option>
-                                    {{-- TODO: LOOP valid course --}}
+                                    @foreach ($courses as $course)
+                                        <option value="{{ $course->id }}"> {{ $course->course_name }}</option>
+                                    @endforeach
                                 </select>
                                 @error('course_limit')
                                     <span class="text-danger"></span>
@@ -115,7 +134,7 @@
                             </div>
                             <div class="form-group has-feedback" id="year_selection" style="display: none">
                                 <label for="year_limit">Year Level Limit: </label>
-                                <select type="text" name="year_limit" id="year_limit" required" class="form-control">
+                                <select type="text" name="year_limit" id="year_limit" class="form-control">
                                     <option value="" selected>-------</option>
                                     <option value="1">1st Year</option>
                                     <option value="2">2nd Year</option>
@@ -232,14 +251,20 @@
                     $("#colege_selection").css('display', 'none')
                     $("#course_selection").css('display', 'none')
                     $("#year_selection").css('display', 'none')
+                    $("#college_limit").attr("required", false);
+                    $("#course_limit").attr("required", false);
+                    $("#year_limit").attr("required", false);
                 } else if (+selected === 2) {
                     $("#colege_selection").css('display', 'block')
                     $("#course_selection").css('display', 'none')
                     $("#year_selection").css('display', 'none')
+                    $("#college_limit").attr("required", true);
                 } else if (+selected === 3) {
                     $("#course_selection").css('display', 'block')
                     $("#year_selection").css('display', 'block')
                     $("#colege_selection").css('display', 'none')
+                    $("#course_limit").attr("required", true);
+                    $("#year_limit").attr("required", true);
                 } else {
                     $("#colege_selection").css('display', 'none')
                     $("#course_selection").css('display', 'none')
