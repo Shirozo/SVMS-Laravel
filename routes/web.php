@@ -81,5 +81,8 @@ Route::put("/positions/update", [PositionsController::class, "update"])
 Route::get("/elections", [ElectionsController::class, "index"])
     ->middleware('auth')
     ->name('elections.index');
+Route::post("/elections/create", [ElectionsController::class, "store"])
+    ->middleware('auth')
+    ->name('elections.store');
 
 require __DIR__ . '/auth.php';
