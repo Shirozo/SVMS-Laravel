@@ -31,7 +31,7 @@ return new class extends Migration
             $table->text("voter_name");
             $table->foreignId("voter_id")->constrained(table: "users", column: "id")->onUpdate("cascade")->onDelete('cascade');
             $table->foreignId("election_id")->constrained(table: "elections", column: "id")->onUpdate("cascade")->onDelete('cascade');
-            $table->boolean("has_voted")->default("false");
+            $table->boolean("has_voted")->default(false);
             $table->timestamps();
         });
     }
@@ -41,6 +41,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists("election_data");
         Schema::dropIfExists('elections');
     }
 };

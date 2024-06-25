@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('colleges', function (Blueprint $table) {
             $table->id();
-            $table->char("college_name", length:100)->nullable(false)->unique();
+            $table->char("college_name", length: 100)->nullable(false)->unique();
             $table->timestamps();
         });
 
 
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->char("course_name", length:100)->nullable(false)->unique();
+            $table->char("course_name", length: 100)->nullable(false)->unique();
             $table->unsignedBigInteger("college_id");
             $table->timestamps();
 
@@ -33,7 +33,8 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {   Schema::dropIfExists("courses");
+    {
+        Schema::dropIfExists("courses");
         Schema::dropIfExists('colleges');
     }
 };
