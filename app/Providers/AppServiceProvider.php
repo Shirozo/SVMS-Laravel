@@ -14,9 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
-        Blade::directive('ordinal', function ($expression) {
-            return "<?php echo ordinal($expression); ?>";
-        });
+
     }
 
     /**
