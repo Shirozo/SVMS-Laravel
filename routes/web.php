@@ -87,12 +87,12 @@ Route::post("/elections/create", [ElectionsController::class, "store"])
     ->name('elections.store');
 
 
-Route::post('/election/register', [ElectionsRegisterController::class, "register"])
+Route::post('/election/retrieve/voter', [ElectionsRegisterController::class, "retrieve"])
     ->middleware('auth')
-    ->name('election.register');
-Route::get("/election/batch/create", [ElectionsRegisterController::class, "insertVoters"])
+    ->name('election.retrieve');
+Route::get("/election/register/voter", [ElectionsRegisterController::class, "register"])
     ->middleware('auth')
-    ->name("election.batchCreate");
+    ->name("election.register");
 
 
 require __DIR__ . '/auth.php';
