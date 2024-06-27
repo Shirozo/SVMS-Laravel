@@ -3,6 +3,7 @@
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ElectionsController;
+use App\Http\Controllers\ElectionsRegisterController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\VoteController;
@@ -84,5 +85,14 @@ Route::get("/elections", [ElectionsController::class, "index"])
 Route::post("/elections/create", [ElectionsController::class, "store"])
     ->middleware('auth')
     ->name('elections.store');
+
+
+Route::post('/election/register', [ElectionsRegisterController::class, "register"])
+    ->middleware('auth')
+    ->name('election.register');
+Route::get("/election/batch/create", [ElectionsRegisterController::class, "insertVoters"])
+    ->middleware('auth')
+    ->name("election.batchCreate");
+
 
 require __DIR__ . '/auth.php';
