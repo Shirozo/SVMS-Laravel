@@ -19,7 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
-
+        $middleware->web(append: [
+            \Fahlisaputra\Minify\Middleware\MinifyHtml::class,
+            \Fahlisaputra\Minify\Middleware\MinifyCss::class,
+            \Fahlisaputra\Minify\Middleware\MinifyJavascript::class,
+        ]);
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
