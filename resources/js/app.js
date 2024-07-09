@@ -7,3 +7,4 @@ import "../static/bower_components/datatables.net-bs/js/dataTables.bootstrap.min
 import "../static/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"
 import "../static/bower_components/fastclick/lib/fastclick.js"
 import "../static/dist/js/adminlte.min.js"
+import "../static/toastr.min.js"

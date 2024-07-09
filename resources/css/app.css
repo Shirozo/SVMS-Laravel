@@ -6,6 +6,31 @@
 @import "../static/dist/css/skins/_all-skins.min.css";
 @import "../static/bower_components/daterangepicker-master/daterangepicker.css";
 @import "../static/plugins/timepicker/bootstrap-timepicker.min.css";
+@import "../static/css/toastr.min.css";
+
+.bottom-progress {
+    width: 400px;
+    position: absolute;
+    bottom: 5%;
+    right: 2%;
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.bottom-progress:hover{
+    transform: scale(1.1);
+}
+
+.prog-back {
+    height: 50px;
+    display: flex;
+    align-items:flex-end;
+    border: black solid 1px;
+    background-color: white;
+    border-radius: .5em;
+    padding: 2% 2%;
+    box-shadow: 2px 5px;
+}
 
 .mt20 {
     margin-top: 20px;
