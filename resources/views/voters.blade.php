@@ -10,7 +10,8 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
+                        <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"
+                            style="margin-right: 10px">
                             <i class="fa fa-plus"></i> Add New
                         </a>
                         <a href="#uploaduser" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
@@ -169,34 +170,41 @@
         </div>
     </div>
 
-    <div class="modal fade" id="uploaduser">
+    <div class="modal fade" id="uploaduser" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                     <h4 class="modal-title"><b>Upload User</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                    <form action="#" class="form-horizontal" method="POST" id="uploadFile"
+                        enctype="multipart/form-data">
                         @csrf
-                        <div style="align-items: center; width:fit-content; margin:0% auto;">
+                        <div style="align-items: center; width:fit-content; margin:0% auto;" id="form-div">
                             <label for="voter_file">
                                 <div class="voter-upload" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
-                                    <img src="images/upload.png" width="100px" height="100px" id="np_upload">
+                                    <img src="images/upload.png" width="100px" height="100px" id="no_upload">
                                     <img src="images/uploaded.png" width="100px" height="100px" id="uploaded"
                                         style="display: none">
                                 </div>
                             </label>
-                            <input type="file" accept=".csv, .xlsx" name="" id="voter_file" required>
+                            <input onchange="changeUploadicon()" type="file" accept=".csv, .xlsx" name="voter_file"
+                                id="voter_file" required>
+                        </div>
+                        <div class="modal-body" id="add_progress" style="display: none;">
+                            <p class="text-center" id="ajax_return"></p>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated active"
+                                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
+                                    style="width: 2%" id="progress-bar"></div>
+                            </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
+                            <button type="button" id="uploadClose" class="btn btn-danger  btn-flat"
+                                data-dismiss="modal">
                                 <i class="fa fa-close"></i> Close
                             </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="add"
-                                onclick="enableform()">
+                            <button type="submit" class="btn btn-success  btn-flat" id="uploadButton">
                                 <i class="fa fa-save"></i> Upload
                             </button>
                         </div>
@@ -352,37 +360,6 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="deactivate">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title"><b>Deactivate....</b></h4>
-                </div>
-                <div class="modal-body">
-                    <form action="#" class="form-horizontal" method="POST">
-                        @csrf
-                        <input type="hidden" class="id" name="id">
-                        <div class="text-center">
-                            <p>DEACTIVATE ALL USER?</p>
-                            <h2 class="bold fullname"></h2>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger  btn-flat" data-dismiss="modal">
-                                <i class="fa fa-close"></i> Close
-                            </button>
-                            <button type="button" class="btn btn-success  btn-flat" name="add">
-                                <i class="fa fa-save"></i> Confirm
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 
@@ -412,19 +389,48 @@
 
             })
 
+            $(document).on("submit", "#uploadFile", (e) => {
+                e.preventDefault()
+                var fileInput = document.getElementById("voter_file");
+                var formData = new FormData();
+
+                if (fileInput.files.length > 0) {
+                    formData.append("v_file", fileInput.files[0]);
+                    $("#ajax_return").html("Processing File...")
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('voters.upload') }}",
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        data: formData,
+                        processData: false, // Don't process the data
+                        contentType: false, // Don't set any content type header
+                        enctype: 'multipart/form-data',
+                        success: function(response) {
+                            $("#progress-bar").css("width", "100%")
+                            $("#ajax_return").html(response.message)
+                            $("#form-div").css("display", "none")
+                            $("#add_progress").css("display", "block")
+                            $("#uploadClose").attr("disabled", true)
+                            $("#uploadButton").attr("disabled", true)
+                            registerUser(response.folder)
+                        },
+                        error: function(error) {
+                            toastr.error("An error occured!")
+                        }
+                    });
+
+                }
+            })
+
         })
 
 
-        function enableform() {
-            /*enable the form. sample*/
-            $("#id_username").prop("disabled", false)
-        }
-
-        // Add url here for API
         function getRow(id) {
             $.ajax({
                 type: "GET",
-                url: "{{ route('voter.api') }}",
+                url: "{{ route('voters.api') }}",
                 data: {
                     voter_id: id
                 },
@@ -453,22 +459,101 @@
             })
         }
 
+        function registerUser(f_name, attempt = 0) {
+            $("#progress-bar").css("width", "0%")
+            $("#ajax_return").html("Creating Jobs...")
+            $.ajax({
+                type: "POST",
+                url: `{{ route('voters.register') }}`,
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                data: {
+                    v: f_name.toString()
+                },
+                dataType: "json",
+                success: function(response) {
+                    $("#progress-bar").css("width", "100%")
+                    loadProgress(response.id)
+                },
+                error: function(xhr, status, error) {
+                    if (+attempt < 3) {
+                        $("#ajax_return").html("An error occured! Retrying...")
+                        setTimeout(() => {
+                            registerUser(f_name, attempt + 1)
+                        }, 3000);
+                    } else {
+                        $("#ajax_return").html("Maximum retry reached! Please Try Again Later!")
+                        $("#uploadClose").removeAttr("disabled")
+                        $("#uploadButton").removeAttr("disabled")
+                    }
+                }
+            })
+        }
+
+        async function loadProgress(id) {
+
+            $("#progress-bar").css("width", "0%")
+            $("#ajax_return").html("Registering User...")
+
+            window.addEventListener('keydown', function(event) {
+                if (event.key === 'r' && (event.ctrlKey || event.metaKey)) {
+                    event.preventDefault();
+                    alert('Reload not allowed while uploading data!');
+                } else if (event.key === 'F5') {
+                    event.preventDefault();
+                    alert('Reload not allowed while uploading data!');
+                }
+            });
+
+            let pending = 1
+
+            const interValLoop = setInterval(async () => {
+                const response = await $.ajax({
+                    type: "GET",
+                    "url": "{{ route('voters.progress') }}",
+                    data: {
+                        batch_id: id
+                    },
+                    dataType: "json",
+                })
+                pending = response.pendingJobs
+
+                $("#ajax_return").html(`Registering User...    ${response.progress}%`)
+                $("#progress-bar").css("width", `${response.progress}%`)
+
+                if (pending === 0 || pending === response.failedJobs) {
+                    toastr.success("Voter's Uploaded!")
+                    clearInterval(interValLoop);
+                    location.reload(true);
+                }
+
+            }, 2000);
+
+        }
+
+        function changeUploadicon() {
+            $("#no_upload").css('display', 'none')
+            $("#uploaded").css('display', 'block')
+        }
+
+
         function handleDragOver(event) {
             event.preventDefault()
-            event.dataTransfer.dropEffect = "copy"
+            event.dataTransfer.dropEffec = "copy"
         }
 
 
         function handleDrop(event) {
             event.preventDefault()
-            const file = event.dataTransfer.files;
+            const files = event.dataTransfer.files;
 
-            for (let i = 0; i < file.length; i++) {
-                console.log("Dropped file", file[i])
-            }
 
             const fileInput = document.getElementById("voter_file");
-            fileInput.files = file;
+            fileInput.files = files;
+
+            $("#no_upload").css('display', 'none')
+            $("#uploaded").css('display', 'block')
         }
     </script>
 @endsection
