@@ -12,7 +12,11 @@ use App\Models\College;
 use Illuminate\Support\Facades\Route;
 
 
-// TODO: Add Gate Rules after full implementation
+/* 
+    TODO: Add Gate Rules after full implementation
+    //TODO: Group the route
+    TODO: ->middleware('can:Gatename'); For Auth
+*/
 
 Route::get('/', [IndexController::class, "index"])->name("index")
     ->middleware('auth');
@@ -21,78 +25,62 @@ Route::get('/vote', [VoteController::class, "votes"])->name("votes")
     ->middleware('auth');
 
 
+Route::group(['prefix' => 'college/', 'as' => "college.", "middleware" => ['auth']], function () {
+    Route::get("", [CollegeController::class, "show"])->name("index");
 
-Route::get("/college", [CollegeController::class, "show"])->name("college.index")
-    ->middleware('auth');
-// ->middleware('can:Gatename'); For Auth
-Route::post("/college/create", [CollegeController::class, "store"])
-    ->middleware('auth')
-    ->name("college.store");
+    Route::post("/create", [CollegeController::class, "store"])->name("store");
 
-Route::delete("college/delete/", [CollegeController::class, "destroy"])
-    ->middleware("auth")
-    ->name("college.destroy");
+    Route::delete("/delete", [CollegeController::class, "destroy"])->name("destroy");
+});
 
 
+Route::group(['prefix' => 'courses/', 'as' => "courses.", "middleware" => ['auth']], function () {
+    Route::get("", [CoursesController::class, "index"])->name("index");
 
-Route::get("/courses/create", [CoursesController::class, "index"])
-    ->middleware("auth")
-    ->name("courses.index");
-Route::post("/courses", [CoursesController::class, "store"])
-    ->middleware('auth')
-    ->name('courses.store');
-Route::delete("/course/destroy", [CoursesController::class, "destroy"])
-    ->middleware('auth')
-    ->name('courses.destroy');
+    Route::post("/create", [CoursesController::class, "store"])->name('store');
 
+    Route::delete("/destroy", [CoursesController::class, "destroy"])->name('destroy');
+});
 
-Route::get("/voters", [VoterController::class, "index"])->name("voters.index")
-    ->middleware('auth');
-Route::post('/voters/sign-up', [VoterController::class, "store"])
-    ->middleware('auth')
-    ->name('voters.store');
-Route::delete('/voter/delete', [VoterController::class, "destroy"])
-    ->middleware('auth')
-    ->name('voters.destroy');
-Route::put('/voters/update', [VoterController::class, "update"])
-    ->middleware('auth')
-    ->name('voters.update');
-Route::get('/voter/user/data/', [VoterController::class, "api"])
-    ->middleware('auth')
-    ->name('voter.api');
+Route::group(['prefix' => 'voters/', 'as' => "voters.", "middleware" => ['auth']], function () {
+    Route::get("", [VoterController::class, "index"])->name("index");
 
+    Route::post('/sign-up', [VoterController::class, "store"])->name('store');
 
-Route::get('/positions', [PositionsController::class, "index"])
-    ->middleware('auth')
-    ->name('positions.index');
-Route::post('/positions/create', [PositionsController::class, "store"])
-    ->middleware('auth')
-    ->name('positions.store');
-Route::delete("/positions/delete", [PositionsController::class, "destroy"])
-    ->middleware("auth")
-    ->name("positions.destroy");
-Route::get("/positions/data", [PositionsController::class, "api"])
-    ->middleware("auth")
-    ->name("positions.api");
-Route::put("/positions/update", [PositionsController::class, "update"])
-    ->middleware("auth")
-    ->name("positions.update");
+    Route::put('/update', [VoterController::class, "update"])->name('update');
 
+    Route::delete('/delete', [VoterController::class, "destroy"])->name('destroy');
 
-Route::get("/elections", [ElectionsController::class, "index"])
-    ->middleware('auth')
-    ->name('elections.index');
-Route::post("/elections/create", [ElectionsController::class, "store"])
-    ->middleware('auth')
-    ->name('elections.store');
+    Route::get('/user/data', [VoterController::class, "api"])->name('api');
 
+    Route::post("/upload", [VoterController::class, "upload"])->name("upload");
 
-Route::post('/election/retrieve/voter', [ElectionsRegisterController::class, "retrieve"])
-    ->middleware('auth')
-    ->name('election.retrieve');
-Route::get("/election/register/voter", [ElectionsRegisterController::class, "register"])
-    ->middleware('auth')
-    ->name("election.register");
+    Route::post("/register", [VoterController::class, "registerVoters"])->name("register");
+
+    Route::get("/upload/progress", [VoterController::class, "progress"])->name('progress');
+});
+
+Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['auth']], function () {
+    Route::get('', [PositionsController::class, "index"])->name('index');
+
+    Route::post('/positions/create', [PositionsController::class, "store"])->name('store');
+
+    Route::put("/update", [PositionsController::class, "update"])->name("update");
+
+    Route::delete("/delete", [PositionsController::class, "destroy"])->name("destroy");
+
+    Route::get("/positions/data", [PositionsController::class, "api"])->name("api");
+});
+
+Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['auth']], function () {
+    Route::get("", [ElectionsController::class, "index"])->name('index');
+
+    Route::post("/create", [ElectionsController::class, "store"])->name('store');
+
+    Route::post('/retrieve/voter', [ElectionsRegisterController::class, "retrieve"])->name('retrieve');
+
+    Route::get("/register/voter", [ElectionsRegisterController::class, "register"])->name("register");
+});
 
 
 require __DIR__ . '/auth.php';
