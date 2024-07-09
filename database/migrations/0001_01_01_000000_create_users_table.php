@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('last_name', 30);
             $table->char("username", 30)->unique();
             $table->char("student_id", 8)->unique();
-            $table->enum('user_type', [1, 2, 3]);
+            $table->enum('user_type', [1, 2, 3])->default(3);
             $table->foreignId("course_id")->nullable()->constrained(table: "courses", column: "id")->onUpdate("cascade")->onDelete('cascade');
             $table->enum("year", [1, 2, 3, 4])->nullable();
             $table->enum("status", [0, 1])->default(1);
