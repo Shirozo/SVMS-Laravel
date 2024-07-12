@@ -12,12 +12,12 @@
             <ul class="nav navbar-nav">
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src='images/userplaceholder.png' class="user-image" alt="User Image">
+                        <img src="{{ asset('images/userplaceholder.png') }}" class="user-image" alt="User Image">
                         <span class="hidden-xs">Username</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="user-header">
-                            <img src='images/userplaceholder.png' class="img-circle" alt="User Image">
+                            <img src="{{ asset('images/userplaceholder.png') }}" class="img-circle" alt="User Image">
                             <p>
                                 Username<small>Member since 2021 </small>
                             </p>
