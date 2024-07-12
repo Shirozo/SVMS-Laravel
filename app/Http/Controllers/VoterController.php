@@ -26,6 +26,7 @@ class VoterController extends Controller
         $voters = DB::table("users")
             ->select(DB::raw("users.id,
                 users.username,
+                users.year,
                 courses.course_name, colleges.college_name,
                 CONCAT(users.last_name, ', ', users.first_name, ' ' , users.middle_name) AS fullname "))
             ->join("courses", "users.course_id", "=", "courses.id")
@@ -149,8 +150,6 @@ class VoterController extends Controller
             "status" => $status[$request->edit_status],
             'remember_token' => Str::random(60)
         ]);
-
-        event(new PasswordReset($user_data));
 
         toastr("Voter Updated!", Type::SUCCESS);
         return redirect()->route('voters.index');
