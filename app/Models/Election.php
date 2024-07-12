@@ -14,6 +14,7 @@ class Election extends Model
         "scope",
         "college_limit",
         "course_limit",
-        "year_level_limit"
+        "year_level_limit",
+        "started"
     ];
 }
