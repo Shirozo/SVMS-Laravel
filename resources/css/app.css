@@ -1,7 +1,7 @@
 @import "../static/bower_components/bootstrap/dist/css/bootstrap.min.css";
 @import "../static/plugins/iCheck/all.css";
 @import "../static/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css";
-@import "../static/bower_components/font-awesome/css/font-awesome.min.css";
+@import "../static/bower_components/font-awesome/css/all.min.css";
 @import "../static/dist/css/AdminLTE.min.css";
 @import "../static/dist/css/skins/_all-skins.min.css";
 @import "../static/bower_components/daterangepicker-master/daterangepicker.css";
@@ -17,8 +17,25 @@
     transition: transform 0.3s ease-in-out;
 }
 
-.bottom-progress:hover{
+.bottom-progress:hover, .view-ballot:hover{
     transform: scale(1.1);
+}
+
+.arrow-back {
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.arrow-back:hover {
+    transform: scale(1.6);
+}
+
+.btn {
+    margin-right: 5px
+}
+
+.view-ballot {
+    float: right;
 }
 
 .prog-back {
