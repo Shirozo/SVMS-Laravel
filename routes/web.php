@@ -75,11 +75,18 @@ Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['
 Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['auth']], function () {
     Route::get("", [ElectionsController::class, "index"])->name('index');
 
+    Route::get('/information/id/{id}', [ElectionsController::class, "show"])->name("show");
+
+    Route::get('/{action}/id/{id}', [ElectionsController::class, "update"])->name("update");
+
+    Route::delete('/delete', [ElectionsController::class, "destroy"])->name("destroy");
+
     Route::post("/create", [ElectionsController::class, "store"])->name('store');
 
-    Route::post('/retrieve/voter', [ElectionsRegisterController::class, "retrieve"])->name('retrieve');
+    Route::post('/register/voter', [ElectionsRegisterController::class, "register"])->name('register');
 
-    Route::get("/register/voter", [ElectionsRegisterController::class, "register"])->name("register");
+    Route::get('/progress', [ElectionsRegisterController::class, "progress"])->name("progress");
+
 });
 
 
