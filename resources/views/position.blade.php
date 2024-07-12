@@ -1,5 +1,9 @@
 @extends('base.base')
 
+@section('page_name')
+    Positions
+@endsection
+
 @section('title')
     Position
 @endsection

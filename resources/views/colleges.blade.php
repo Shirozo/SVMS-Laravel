@@ -1,5 +1,9 @@
 @extends('base.base')
 
+@section('page_name')
+    College
+@endsection
+
 @section('title')
     College
 @endsection

@@ -1,5 +1,9 @@
 @extends('base.base')
 
+@section('page_name')
+    Voters
+@endsection
+
 @section('title')
     Voters
 @endsection
@@ -23,6 +27,7 @@
                             <thead style="background-color: #222D32; color:white;">
                                 <th>Fullname</th>
                                 <th>Username</th>
+                                <th>Year Level</th>
                                 <th>Course</th>
                                 <th>College</th>
                                 <th style="width: 25% !important">Action</th>
@@ -32,6 +37,7 @@
                                     <tr>
                                         <td>{{ $voter->fullname }}</td>
                                         <td>{{ $voter->username }}</td>
+                                        <td>{{ $voter->year }}</td>
                                         <td>{{ $voter->course_name }}</td>
                                         <td>{{ $voter->college_name }}</td>
                                         <td>
@@ -195,8 +201,7 @@
                             <p class="text-center" id="ajax_return"></p>
                             <div class="progress">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated active"
-                                    role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
-                                    style="width: 2%" id="progress-bar"></div>
+                                    role="progressbar" style="width: 2%" id="progress-bar"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -485,7 +490,6 @@
                     } else {
                         $("#ajax_return").html("Maximum retry reached! Please Try Again Later!")
                         $("#uploadClose").removeAttr("disabled")
-                        $("#uploadButton").removeAttr("disabled")
                     }
                 }
             })
@@ -528,7 +532,7 @@
                     location.reload(true);
                 }
 
-            }, 2000);
+            }, 1000);
 
         }
 

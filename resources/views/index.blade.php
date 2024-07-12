@@ -1,7 +1,11 @@
 @extends('base.base')
 
-@section("title")
-Dashboard
+@section('page_name')
+    Dashboard
+@endsection
+
+@section('title')
+    Dashboard
 @endsection
 
 @section('main')
@@ -85,6 +89,13 @@ Dashboard
         </div>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", async function() {
+            data = await fetch('https://api.thedogapi.com/v1/images/search')
+            response = await data.json()
+            console.log(response[0].id)
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
