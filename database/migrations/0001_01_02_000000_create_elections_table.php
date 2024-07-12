@@ -20,12 +20,12 @@ return new class extends Migration
             $table->unsignedBigInteger("course_limit")->nullable();
             $table->enum("year_level_limit", [1, 2, 3, 4])->nullable();
             $table->timestamps();
-
+            
             //Foreign Key
             $table->foreign("college_limit")->references('id')->on('colleges')->onUpdate("cascade")->onDelete("cascade");
             $table->foreign("course_limit")->references("id")->on("courses")->onUpdate("cascade")->onDelete("cascade");
         });
-
+        // TODO: Remove the update and cascade since this is a record
         Schema::create('election_data', function (Blueprint $table) {
             $table->id();
             $table->text("voter_name");
