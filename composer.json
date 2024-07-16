@@ -7,9 +7,11 @@
     "require": {
         "php": "^8.2",
         "fahlisaputra/laravel-minify": "^1.1",
-        "laravel/framework": "^11.9",
+        "laravel/framework": "^11.15",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "sofa/eloquence": "^0.1.0",
+        "sofa/eloquence-base": "^7.1",
         "yoeunes/toastr": "^3.0"
     },
     "require-dev": {
