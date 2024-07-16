@@ -12,7 +12,7 @@
 </head>
 
 <body class="hold-transition skin-blue">
-    @include('base.navbar')
+    @include('base.election-navbar')
     <div class="content" style="background-color: #ecf0f5; min-height:900px">
         <section class="content-header">
             <a style="color:black" href="{{ route('elections.index') }}">
