@@ -75,7 +75,7 @@
                                 <i class="fa fa-close"></i> Close
                             </button>
                             <button type="submit" class="btn btn-success btn-flat" name="add">
-                                <i class="fa fa-save"> Save</i>
+                                <i class="fa-solid fa-save"></i>Save
                             </button>
                         </div>
                     </form>
