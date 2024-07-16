@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ElectionsController;
@@ -77,6 +78,8 @@ Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['
 
     Route::get('/information/id/{id}', [ElectionsController::class, "show"])->name("show");
 
+    Route::get('/voter/data', [ElectionsController::class, "find"])->name("search");
+
     Route::get('/{action}/id/{id}', [ElectionsController::class, "update"])->name("update");
 
     Route::delete('/delete', [ElectionsController::class, "destroy"])->name("destroy");
@@ -87,6 +90,14 @@ Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['
 
     Route::get('/progress', [ElectionsRegisterController::class, "progress"])->name("progress");
 
+});
+
+Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth']], function() {
+
+    Route::post('/add/election/{id}', [CandidateController::class, "store"])->name("store");
+
+    Route::delete('/delete/election/id/{id}', [CandidateController::class, "destroy"])->name("destroy");
+    
 });
 
 
