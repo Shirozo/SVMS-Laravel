@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ElectionRegister;
+use App\Models\Candidate;
 use App\Models\Election;
+use App\Models\ElectionData;
 use App\Models\User;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -73,5 +75,40 @@ class ElectionsRegisterController extends Controller
     {
         $batch_id = $request->batch_id;
         return Bus::findBatch($batch_id);
+    }
+
+    public function destroy_voter($id, Request $request)
+    {
+
+
+        if ($request->has('vtr_id')) {
+            $voter_data = ElectionData::find($request->vtr_id);
+
+            if ($voter_data === null) {
+                $data = ["message" => "Voter Don't Exist!"];
+                $code = 404;
+            } else {
+                $voter_data->delete();
+
+                $is_candidate = Candidate::where(
+                    [
+                        ['user_id', "=", $voter_data->voter_id],
+                        ['election_id', "=", $voter_data->election_id]
+                    ]
+                );
+
+                if ($is_candidate) {
+                    $is_candidate->delete();
+                }
+                
+                $data = ["message" => "Voter Removed From Election!"];
+                $code = 200;
+
+            }
+        } else {
+            $data = ["message" => "Undefined Voter!"];
+            $code = 404;
+        }
+        return response()->json($data, $code);
     }
 }
