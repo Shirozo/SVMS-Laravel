@@ -6,7 +6,6 @@ use App\Jobs\VoterUpload;
 use App\Models\Course;
 use App\Models\User;
 use Flasher\Prime\Notification\Type;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
