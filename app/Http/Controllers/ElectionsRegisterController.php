@@ -100,15 +100,69 @@ class ElectionsRegisterController extends Controller
                 if ($is_candidate) {
                     $is_candidate->delete();
                 }
-                
-                $data = ["message" => "Voter Removed From Election!"];
-                $code = 200;
 
+                $data = [
+                    "message" => "Voter Removed From Election!",
+                    "name" => $voter_data->voter_name
+                ];
+                $code = 200;
             }
         } else {
             $data = ["message" => "Undefined Voter!"];
             $code = 404;
         }
         return response()->json($data, $code);
+    }
+
+    public function store_voter($id, Request $request)
+    {
+        if ($request->has("add_user_id") && $request->has("elec_id")) {
+            $elec_id = $request->elec_id;
+            $voter = User::find($request->add_user_id);
+
+            if ($elec_id === $id && $voter !== null) {
+                $has_data = ElectionData::where(
+                    [
+                        ["voter_id", "=", $voter->id],
+                        ["election_id", "=", $elec_id]
+                    ]
+                )->exists();
+                    
+                
+                if ($has_data) {
+                    return response()->json([
+                        "message" => "Voter Already Exist!",
+                    ], 403);
+                }
+
+                ElectionData::create([
+                    "voter_name" => $voter->first_name . " " . $voter->last_name,
+                    "voter_id" => $voter->id,
+                    "election_id" => $elec_id
+                ]);
+
+                $data = ElectionData::where(
+                    [
+                        ["voter_name", "=", $voter->first_name . " " . $voter->last_name],
+                        ["election_id", "=", $elec_id]
+                    ]
+                )->first();
+
+            
+                return response()->json([
+                    "message" => "Voter Added!",
+                    "voter_name" => $voter->first_name . " " . $voter->last_name,
+                    "id" => $data->id
+                ], 200);
+            } else {
+                return response()->json([
+                    "message" => "Action Forbidden!"
+                ], 403);
+            }
+        } else {
+            return response()->json([
+                "message" => "Expected id but passed null!"
+            ], 403);
+        }
     }
 }
