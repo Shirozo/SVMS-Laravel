@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BallotController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CollegeController;
 use App\Http\Controllers\CoursesController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\VoterController;
+use App\Jobs\ElectionRegister;
 use App\Models\College;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +61,10 @@ Route::group(['prefix' => 'voters/', 'as' => "voters.", "middleware" => ['auth']
     Route::post("/register", [VoterController::class, "registerVoters"])->name("register");
 
     Route::get("/upload/progress", [VoterController::class, "progress"])->name('progress');
+
+    Route::delete("/voter/delete/election/id/{id}", [ElectionsRegisterController::class, "destroy_voter"])->name("delete_specific");
+
+    Route::get("/voter/find", [VoterController::class, "find"])->name("find");
 });
 
 Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['auth']], function () {
@@ -90,6 +96,8 @@ Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['
 
     Route::get('/progress', [ElectionsRegisterController::class, "progress"])->name("progress");
 
+    Route::post("/add/voter/id/{id}", [ElectionsRegisterController::class, "store_voter"])->name("store_voter");
+
 });
 
 Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth']], function() {
@@ -98,6 +106,10 @@ Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['
 
     Route::delete('/delete/election/id/{id}', [CandidateController::class, "destroy"])->name("destroy");
     
+});
+
+Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth']], function() {
+    Route::get("/election/id/{id}", [BallotController::class, "show"])->name("show");
 });
 
 
