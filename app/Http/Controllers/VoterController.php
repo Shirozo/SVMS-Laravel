@@ -282,12 +282,11 @@ class VoterController extends Controller
                     $batches->add(new VoterUpload($data, $header));
                 }
 
-                
+
                 return response()->json([
                     "id" => $batches->id,
                 ], 200);
-            }
-            else {
+            } else {
                 return response()->json([
                     "message" => "Invalid Argument!"
                 ], 403);
@@ -305,4 +304,25 @@ class VoterController extends Controller
         return Bus::findBatch($batch_id);
     }
 
+    public function find(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return response()->json([]);
+        }
+
+        $datas = User::search($term)
+            ->where("user_type", "!=", 1)
+            ->limit(5)
+            ->get();
+
+        $formatted_data = [];
+
+        foreach ($datas as $data) {
+            $formatted_data[] = ['id' => $data->id, 'text' => $data->first_name . " " . $data->middle_name . " " . $data->last_name];
+        }
+
+        return response()->json($formatted_data);
+    }
 }
