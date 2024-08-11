@@ -40,6 +40,18 @@ class CandidateController extends Controller
 
         if ($user && $election !== null) {
 
+            $has_data = Candidate::where(
+                [
+                    ["user_id","=", $request->user_id],
+                    ['election_id', '=', $id]
+                ]
+            )->first();
+
+            if ($has_data) {
+                toastr("Already a candidate!", Type::ERROR);
+                return redirect()->back()->withErrors($valid_data);
+            }
+
             $folder = "candidates/" . $election->title . '-' . $election->id;
 
             $fullPath = resource_path($folder);
