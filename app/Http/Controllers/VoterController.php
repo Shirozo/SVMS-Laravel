@@ -238,6 +238,20 @@ class VoterController extends Controller
                     "folder" => $r_path
                 ], 200);
             } catch (\Throwable $th) {
+                $filenameWithExt = $request->file('v_file')->getClientOriginalName();
+
+                $file_name = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+
+                $currentDate = date('Y-m-d-H-i-s');
+
+                $username = Auth::user()->username;
+
+                $r_path = $currentDate . "-" . $file_name . "-" . $username;
+
+                $folderPath = 'uploads/' . $r_path;
+
+                $folderFullPath = resource_path($folderPath);
+                
                 if (File::exists($folderFullPath)) {
                     // Create the folder
                     File::deleteDirectory($folderFullPath);
