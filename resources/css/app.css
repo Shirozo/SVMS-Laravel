@@ -9,6 +9,53 @@
 @import "../static/css/toastr.min.css";
 @import "../static/css/select2.min.css";
 
+.election-title {
+    display: flex;
+    justify-content: center;
+}
+
+.candidate-container {
+    margin: 1.5% 1%;
+}
+
+.candidate {
+    margin-right: 4%;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+
+.candidate-body {
+    background-color: whitesmoke;
+    padding: 1% 1%;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: row;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.ballot-footer {
+    text-align: center;
+}
+
+.ballot-footer p {
+    margin-left: 10px;
+    display: inline-block;
+}
+
+@media (max-width: 500px) and (min-width: 390px) {
+
+    .candidate-body {
+        flex-direction: column;
+    }
+}
+
 .bottom-progress {
     width: 400px;
     position: absolute;
