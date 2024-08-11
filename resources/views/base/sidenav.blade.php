@@ -14,10 +14,6 @@
             <li>
                 <a href="/"><i class="fa fa-dashboard"></i><span>Dasboard</span></a>
             </li>
-            <li>
-                <a href="{{ route('votes') }}"><i class="glyphicon glyphicon-lock"></i><span>Votes</span></a>
-            </li>
-
             <li class="header">MANAGE</li>
             <li>
                 <a href="{{ route('college.index') }}"><i class="fa fa-university"></i><span>Colleges</span></a>
@@ -37,10 +33,6 @@
             <li class="header">COMMITTEE</li>
             <li>
                 <a href="#"><i class="fa fa-user"></i><span>Committee</span></a>
-            </li>
-            <li class="header">SETTINGS</li>
-            <li>
-                <a href="#"><i class="fa fa-file-text"></i><span>Ballot Position</span></a>
             </li>
             <li class="header">EXIT</li>
             <li>
