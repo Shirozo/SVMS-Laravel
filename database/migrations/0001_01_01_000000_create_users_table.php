@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId("course_id")->nullable()->constrained(table: "courses", column: "id")->onUpdate("cascade")->onDelete('cascade');
             $table->enum("year", [1, 2, 3, 4])->nullable();
             $table->enum("status", [0, 1])->default(1);
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->text('password');
             $table->rememberToken();
