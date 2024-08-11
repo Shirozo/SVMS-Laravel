@@ -15,6 +15,7 @@ class Candidate extends Model
         "bio",
         "user_id",
         "position_id",
-        "election_id"
+        "election_id",
+        "votes"
     ];
 }
