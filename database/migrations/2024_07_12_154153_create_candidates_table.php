@@ -16,6 +16,7 @@ return new class extends Migration
             $table->char("fullname", 150);
             $table->text("photo")->nullable(true);
             $table->text("bio");
+            $table->bigInteger("votes")->default(0)->nullable(true);
             
             //Foreign Key
             $table->foreignId("user_id")->constrained(table: "users", column: "id")->onUpdate("cascade")->onDelete('cascade');
