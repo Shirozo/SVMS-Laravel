@@ -16,5 +16,6 @@ class ElectionData extends Model
         "voter_name",
         "voter_id",
         "election_id",
+        "has_voted"
     ];
 }
