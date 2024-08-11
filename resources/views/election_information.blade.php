@@ -55,7 +55,7 @@
                                 <i class="fa-solid fa-ellipsis-vertical fa-xl"></i>
                             </a>
                             <div class="dropdown-menu dd-left" x-placement="left-start">
-                                <a class="dropdown-item" href="#">View Ballot</a>
+                                <a class="dropdown-item" href="{{ route('ballot.show', ['id' => $election->id])  }}" target="_blank">View Ballot</a>
                                 <a class="dropdown-item" href="#addCandidate" data-toggle="modal">Add Candidate</a>
                                 <a class="dropdown-item" href="#addVoter" data-toggle="modal">Add Voter</a>
                                 <a id="voterButton" class="dropdown-item" onclick="showVoters('voter')">Show Voters</a>
