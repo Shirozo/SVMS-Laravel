@@ -100,16 +100,17 @@ Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['
 
 });
 
-Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth']], function () {
 
     Route::post('/add/election/{id}', [CandidateController::class, "store"])->name("store");
 
     Route::delete('/delete/election/id/{id}', [CandidateController::class, "destroy"])->name("destroy");
-    
 });
 
-Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth']], function () {
     Route::get("/election/id/{id}", [BallotController::class, "show"])->name("show");
+
+    Route::get('/cast/vote/{id}/user/{u_id}', [BallotController::class, "store"])->name("cast");
 });
 
 
