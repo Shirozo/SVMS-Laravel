@@ -113,5 +113,10 @@ Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth']
     Route::get('/cast/vote/{id}/user/{u_id}', [BallotController::class, "store"])->name("cast");
 });
 
+Route::group(['prefix' => 'vote/', 'as' => 'vote.', 'middleware' => ['auth']], function() {
+    Route::get("/election/id/{id}", [VoteController::class, "show"])->name("show");
+
+});
+
 
 require __DIR__ . '/auth.php';
