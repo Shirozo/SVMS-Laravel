@@ -62,75 +62,52 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h3>Votes Tally For Sample Election</h3>
-                <span class="pull-right">
-                    <a href="#" class="btn btn-success btn-sm btn-flat"><span
-                            class="glyphicon glyphicon-print"></span> Print/Download PDF</a>
-                </span>
+                <h3>Active Election</h3>
+                <br>
             </div>
         </div>
-        {{-- <div style="text-align: center">
-            <h3>No Active Election</h3>
-            <img src="images/sad.png" alt="" width="20%">
-        </div> --}}
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="box box-solid">
-                    <div class="box-header with-border">
-                        <h4 class="box-title"><b>Sample Position</b></h4>
-                    </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="sample-data" style="height: 200px"></canvas>
-                        </div>
-                    </div>
-                </div>
+        @if($elections->count() >= 1)
+            <div class="box-body box">
+                <table id="election" class="table table-bordered table-hover table-striped">
+                    <thead style="background-color: #222D32; color:white;">
+                        <th>Name</th>
+                        <th>Scope</th>
+                        <th>Progress</th>
+                        <th style="width: 20%">Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach($elections as $e)
+                            
+                        @endforeach
+                        <tr>
+                            <td>{{ $e->title }}</td>
+                            @if($e->scope == 1) 
+                                <td>University</td>
+                            @elseif($e->scope == 2)
+                                <td>{{ $e->college_name }}</td>
+                            @else
+                                <td>{{ $e->course_name }}</td>
+                            @endif
+                            <td>0</td>
+                            <td>
+                                <a href="{{ route('vote.show', ['id' => $e->id ]) }}" class="btn btn-primary btn-sm btn-flat">
+                                    <i class="fa fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
+        @else
+            <div style="text-align: center">
+                <h3>No Active Election</h3>
+                <img src="images/sad.png" alt="" width="20%">
+            </div>
+        @endif
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", async function() {
-            data = await fetch('https://api.thedogapi.com/v1/images/search')
-            response = await data.json()
-            console.log(response[0].id)
-        })
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById('sample-data');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['January', 'February', 'March', 'April'],
-                    datasets: [{
-                        axis: 'y',
-                        label: 'My First Dataset',
-                        data: [65, 59, 80, 81],
-                        fill: false,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
-                        ],
-                        borderWidth: 1
-                    }]
-                }
-            });
+            $("#election").DataTable()
         });
     </script>
 @endsection
