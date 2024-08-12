@@ -18,6 +18,19 @@
     margin: 1.5% 1%;
 }
 
+.result-chart {
+    display: flex;
+    padding: 2% 2%;
+}
+
+.result-left {
+    width: 70%;
+}
+
+.result-right {
+    width: 30%;
+}
+
 .candidate {
     margin-right: 4%;
     width: fit-content;
