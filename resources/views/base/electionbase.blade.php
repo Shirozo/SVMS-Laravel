@@ -15,14 +15,14 @@
     @include('base.election-navbar')
     <div class="content" style="background-color: #ecf0f5; min-height:900px">
         <section class="content-header">
-            <a style="color:black" href="{{ route('elections.index') }}">
+            <a style="color:black" href="javascript:history.back()">
                 <i class="fa fa-arrow-left fa-lg arrow-back"></i>
             </a>
             <h1 class="text-center">@yield('page_name')</h1>
             <ol class="breadcrumb">
                 <li><a href="/"><i class="fa fa-dashboard"></i>Home</a></li>
                 <li class="active">Election</li>
-                <li class="active">Manage</li>
+                <li class="active">@yield('action')</li>
             </ol>
         </section>
         @yield('main')
