@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidate;
 use App\Models\Election;
 use App\Models\ElectionData;
+use App\Models\Vote;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,11 +28,15 @@ class BallotController extends Controller
                 candidates.bio,
                 candidates.photo,
                 candidates.fullname,
+                candidates.votes,
                 positions.name as position_name,
-                positions.max_vote as max_vote
+                positions.max_vote as max_vote,
+                positions.priority as prio
             "))
             ->join("positions", "candidates.position_id", "=", "positions.id")
             ->where("candidates.election_id", "=", $id)
+            ->orderBy("prio")
+            ->orderBy("fullname")
             ->get();
 
         $c = null;
@@ -49,6 +54,7 @@ class BallotController extends Controller
             ];
         }
 
+    
 
         return view('ballot', [
             "candidates" => $new_data,
@@ -86,10 +92,10 @@ class BallotController extends Controller
             "))
                 ->join("positions", "candidates.position_id", "=", "positions.id")
                 ->where("candidates.election_id", "=", $id)
-                ->first();
+                ->get();
 
             foreach ($positions as $p) {
-                $key = str_replace(" ", "_", (string) $p->name);
+                $key = str_replace(" ", "_", (string)$p->name);
                 $data = $request->$key;
                 if ($p->max_vote === 1) {
                     $candidate_data = Candidate::find($request->$key);
@@ -102,6 +108,13 @@ class BallotController extends Controller
                     $candidate_data->update([
                         "votes" => $candidate_data->votes + 1
                     ]);
+
+                    Vote::create([
+                        "user_id" => $u_id,
+                        "election_id" => $id,
+                        "candidate_id" => $candidate_data->id
+                    ]);
+                    
                 } else {
                     foreach ($data as $d) {
                         $candidate_data = Candidate::find($d);
@@ -114,24 +127,31 @@ class BallotController extends Controller
                         $candidate_data->update([
                             "votes" => $candidate_data->votes + 1
                         ]);
+
+                        Vote::create([
+                            "user_id" => $u_id,
+                            "election_id" => $id,
+                            "candidate_id" => $candidate_data->id
+                        ]);
+                        
                     }
                 }
             }
 
-            DB::commit();
             
             
             $user_data->update([
                 "has_voted" => true
             ]);
             
+            DB::commit();
             toastr("Vote Casted!", Type::SUCCESS);
-            return redirect()->route('some.route');
+            return redirect()->route("ballot.show", ["id" => $id]);
 
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            toastr("An error occurred. Please try again.", Type::ERROR);
+            toastr($th, Type::ERROR);
             return redirect()->back();
         }
     }
