@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,26 +30,40 @@ class VoteController extends Controller
             ->orderBy("fullname")
             ->get();
 
+        $positions = DB::table("candidates")
+            ->select(DB::raw("DISTINCT(position_id),
+            positions.name,
+            positions.max_vote"))
+            ->join("positions", "position_id", "=", "positions.id")
+            ->where("election_id", "=", $id)
+            ->get();
+
+        $positionWinners = [];
+
+        foreach ($positions as $p) {
+            $winners = DB::table("candidates")
+                ->where(
+                    [
+                        ["position_id", "=", $p->position_id],
+                        ["election_id", "=", $id]
+                    ]
+                )->orderBy("votes")
+                ->limit($p->max_vote)->get();
+
+            foreach ($winners as $w) {
+                $positionWinners[$p->name][] = [
+                    "name" => $w->fullname,
+                    "votes" => $w->votes
+                ];
+            }
+        }
+
         $c = null;
         foreach ($candidates as $cand) {
             if ($cand->position_name !== $c) {
                 $new_data[$cand->position_name] = [];
                 $max_vote[$cand->position_name] = $cand->max_vote;
                 $c = $cand->position_name;
-
-                try {
-                    if ($highest[$c]['votes'] < $cand->votes) {
-                        $highest[$c] = [
-                            "votes" => $cand->votes,
-                            "name" => $cand->fullname
-                        ];
-                    }
-                } catch (\Throwable $th) {
-                    $highest[$c] = [
-                        "votes" => $cand->votes,
-                        "name" => $cand->fullname
-                    ];
-                }
             }
 
             $new_data[$c][] = [
@@ -56,12 +71,12 @@ class VoteController extends Controller
                 "c_id" => $cand->id,
                 "c_votes" => $cand->votes,
             ];
-        }   
-       
-        
+        }
+
+
         return view("votes", [
             "new_data" => $new_data,
-            "highest" => $highest
+            "winners" => $positionWinners
         ]);
     }
 }
