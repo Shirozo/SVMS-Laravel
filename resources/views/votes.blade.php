@@ -114,17 +114,19 @@
                                     <th>Vote</th>
                                 </thead>
                                 <tbody>
-                                    @foreach ($highest as $h => $data)
-                                        <tr>
-                                            <td>{{ $h }}</td>
-                                            @if ($highest[$h]['votes'] > 0)
-                                                <td>{{ $highest[$h]['name'] }}</td>
-                                                <td>{{ $highest[$h]['votes'] }}</td>
-                                            @else
-                                                <td>None</td>
-                                                <td>None</td>
-                                            @endif
-                                        </tr>
+                                    @foreach ($winners as $h => $winner)
+                                        @foreach ($winner as $w)
+                                            <tr>
+                                                <td>{{ $h }}</td>
+                                                @if ($w['votes'] >= 0)
+                                                    <td>{{ $w['name'] }}</td>
+                                                    <td>{{ $w['votes'] }}</td>
+                                                @else
+                                                    <td>None</td>
+                                                    <td>None</td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                             </table>
