@@ -28,7 +28,7 @@ Route::get('/vote', [VoteController::class, "votes"])->name("votes")
     ->middleware('auth');
 
 
-Route::group(['prefix' => 'college/', 'as' => "college.", "middleware" => ['auth']], function () {
+Route::group(['prefix' => 'college/', 'as' => "college.", "middleware" => ['auth', 'can:level1']], function () {
     Route::get("", [CollegeController::class, "show"])->name("index");
 
     Route::post("/create", [CollegeController::class, "store"])->name("store");
@@ -37,7 +37,7 @@ Route::group(['prefix' => 'college/', 'as' => "college.", "middleware" => ['auth
 });
 
 
-Route::group(['prefix' => 'courses/', 'as' => "courses.", "middleware" => ['auth']], function () {
+Route::group(['prefix' => 'courses/', 'as' => "courses.", "middleware" => ['auth', 'can:level1']], function () {
     Route::get("", [CoursesController::class, "index"])->name("index");
 
     Route::post("/create", [CoursesController::class, "store"])->name('store');
@@ -45,7 +45,7 @@ Route::group(['prefix' => 'courses/', 'as' => "courses.", "middleware" => ['auth
     Route::delete("/destroy", [CoursesController::class, "destroy"])->name('destroy');
 });
 
-Route::group(['prefix' => 'voters/', 'as' => "voters.", "middleware" => ['auth']], function () {
+Route::group(['prefix' => 'voters/', 'as' => "voters.", "middleware" => ['auth', 'can:level2']], function () {
     Route::get("", [VoterController::class, "index"])->name("index");
 
     Route::post('/sign-up', [VoterController::class, "store"])->name('store');
@@ -67,7 +67,7 @@ Route::group(['prefix' => 'voters/', 'as' => "voters.", "middleware" => ['auth']
     Route::get("/voter/find", [VoterController::class, "find"])->name("find");
 });
 
-Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['auth']], function () {
+Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['auth', 'can:level1']], function () {
     Route::get('', [PositionsController::class, "index"])->name('index');
 
     Route::post('/positions/create', [PositionsController::class, "store"])->name('store');
@@ -79,7 +79,7 @@ Route::group(['prefix' => 'positions/', 'as' => "positions.", "middleware" => ['
     Route::get("/positions/data", [PositionsController::class, "api"])->name("api");
 });
 
-Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['auth']], function () {
+Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['auth', 'can:level2']], function () {
     Route::get("", [ElectionsController::class, "index"])->name('index');
 
     Route::get('/information/id/{id}', [ElectionsController::class, "show"])->name("show");
@@ -100,20 +100,20 @@ Route::group(['prefix' => 'elections/', 'as' => "elections.", "middleware" => ['
 
 });
 
-Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['auth', 'can:level2']], function () {
 
     Route::post('/add/election/{id}', [CandidateController::class, "store"])->name("store");
 
     Route::delete('/delete/election/id/{id}', [CandidateController::class, "destroy"])->name("destroy");
 });
 
-Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth', 'can:level3']], function () {
     Route::get("/election/id/{id}", [BallotController::class, "show"])->name("show");
 
     Route::get('/cast/vote/{id}/user/{u_id}', [BallotController::class, "store"])->name("cast");
 });
 
-Route::group(['prefix' => 'vote/', 'as' => 'vote.', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'vote/', 'as' => 'vote.', 'middleware' => ['auth', 'can:level3']], function() {
     Route::get("/election/id/{id}", [VoteController::class, "show"])->name("show");
 
 });
