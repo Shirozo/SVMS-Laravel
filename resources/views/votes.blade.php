@@ -118,7 +118,7 @@
                                         @foreach ($winner as $w)
                                             <tr>
                                                 <td>{{ $h }}</td>
-                                                @if ($w['votes'] >= 0)
+                                                @if ($w['votes'] > 0)
                                                     <td>{{ $w['name'] }}</td>
                                                     <td>{{ $w['votes'] }}</td>
                                                 @else
@@ -170,38 +170,78 @@
 @section('custom_script')
     <script>
         document.addEventListener("DOMContentLoaded", async function() {
-            const ctx = document.getElementById('sample-data');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['January', 'February'],
-                    datasets: [{
-                        axis: 'y',
-                        label: 'My First Dataset',
-                        data: [65, 59],
-                        fill: false,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 205, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(201, 203, 207, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(255, 159, 64)',
-                            'rgb(255, 205, 86)',
-                            'rgb(75, 192, 192)',
-                            'rgb(54, 162, 235)',
-                            'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
-                        ],
-                        borderWidth: 1
-                    }]
-                }
-            });
+
+            const interval = setInterval(function() {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('vote.api', ['id' => $id]) }}",
+                    dataType: 'json',
+                    success: function(response) {
+                        new_data = response.new_data
+                        winners = response.winners
+
+                        for (var i in new_data) {
+                            const ctx = document.getElementById(i);
+
+                            // Check if a Chart instance is associated with the canvas element
+                            if (Chart.getChart(ctx)) {
+                                // Destroy the old chart instance
+                                Chart.getChart(ctx).destroy();
+                            }
+
+
+                            data = new_data[i]
+                            dataset = []
+                            labels = []
+                            for (d in data) {
+                                dataset.push(data[d]["c_votes"])
+                                labels.push(data[d]["c_name"])
+
+                            }
+
+                            var new_chart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        axis: 'y',
+                                        label: i,
+                                        data: dataset,
+                                        fill: false,
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(255, 159, 64, 0.2)',
+                                            'rgba(255, 205, 86, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                            'rgba(54, 162, 235, 0.2)',
+                                            'rgba(153, 102, 255, 0.2)',
+                                            'rgba(201, 203, 207, 0.2)'
+                                        ],
+                                        borderColor: [
+                                            'rgb(255, 99, 132)',
+                                            'rgb(255, 159, 64)',
+                                            'rgb(255, 205, 86)',
+                                            'rgb(75, 192, 192)',
+                                            'rgb(54, 162, 235)',
+                                            'rgb(153, 102, 255)',
+                                            'rgb(201, 203, 207)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                }
+                            });
+
+                            ctx.chart = new_chart;
+                        }
+
+
+                    },
+                    error: function(error) {
+                        toastr.error("An error occured!")
+                    }
+                });
+
+            }, 10000);
         })
     </script>
 @endsection

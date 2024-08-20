@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
@@ -30,6 +29,11 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        if (Auth::user()->user_type == 3) {
+            toastr("Welcome!", Type::SUCCESS);
+            return redirect()->route("ballot.voter");
+        }
 
         toastr("Welcome!", Type::SUCCESS);
         return redirect()->intended(route("index"));

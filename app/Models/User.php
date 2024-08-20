@@ -30,6 +30,8 @@ class User extends Authenticatable
         'year',
         'email',
         'password',
+        'ssc',
+        'scope'
     ];
 
     /**

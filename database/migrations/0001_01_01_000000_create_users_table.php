@@ -13,17 +13,19 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->char('first_name', 30);
-            $table->char('middle_name', 30);
-            $table->char('last_name', 30);
-            $table->char("username", 30)->unique();
-            $table->char("student_id", 8)->unique();
+            $table->char('first_name', 30)->nullable();
+            $table->char('middle_name', 30)->nullable();
+            $table->char('last_name', 30)->nullable();
+            $table->char("username", 30)->unique()->nullable();
+            $table->char("student_id", 8)->unique()->nullable();
             $table->enum('user_type', [1, 2, 3])->default(3);
             $table->foreignId("course_id")->nullable()->constrained(table: "courses", column: "id")->onUpdate("cascade")->onDelete('cascade');
             $table->enum("year", [1, 2, 3, 4])->nullable();
             $table->enum("status", [0, 1])->default(1);
             $table->string('email')->unique()->nullable(true);
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean("ssc")->nullable(true);
+            $table->foreignId("scope")->nullable()->constrained(table: "colleges", column: "id");
             $table->text('password');
             $table->rememberToken();
             $table->timestamps();

@@ -20,6 +20,7 @@
 
 .result-chart {
     display: flex;
+    flex-direction: column;
     padding: 2% 2%;
 }
 

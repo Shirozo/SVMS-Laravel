@@ -36,9 +36,9 @@
                                             @if ($election->scope == 1)
                                                 University
                                             @elseif ($election->scope == 2)
-                                                {{ $election->college_limit }}
+                                                {{ $election->college_name }}
                                             @elseif ($election->scope == 3)
-                                                {{ $election->course_limit }} - {{ ordinal($election->year_level_limit) }}
+                                                {{ $election->course_name }} - {{ ordinal($election->year_level_limit) }}
                                                 Year
                                             @else
                                             @endif

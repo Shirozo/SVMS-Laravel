@@ -3,6 +3,7 @@
 use App\Http\Controllers\BallotController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CoursesController;
 use App\Http\Controllers\ElectionsController;
 use App\Http\Controllers\ElectionsRegisterController;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [IndexController::class, "index"])->name("index")
-    ->middleware('auth');
+    ->middleware('auth', 'can:level2');
 
 Route::get('/vote', [VoteController::class, "votes"])->name("votes")
     ->middleware('auth');
@@ -110,11 +111,24 @@ Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['
 Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth', 'can:level3']], function () {
     Route::get("/election/id/{id}", [BallotController::class, "show"])->name("show");
 
-    Route::get('/cast/vote/{id}/user/{u_id}', [BallotController::class, "store"])->name("cast");
+    Route::get('/cast/vote/{id}/user/{u_id}', [BallotController::class, "store"])->name("cast")->middleware("can:level3Only");
+
+    Route::get("/elections/list", [BallotController::class, "voter"])->name("voter");
 });
 
-Route::group(['prefix' => 'vote/', 'as' => 'vote.', 'middleware' => ['auth', 'can:level3']], function() {
+Route::group(['prefix' => 'vote/', 'as' => 'vote.', 'middleware' => ['auth', 'can:level2']], function() {
     Route::get("/election/id/{id}", [VoteController::class, "show"])->name("show");
+
+    Route::get("/api/data/election/id/{id}", [VoteController::class, "api"])->name("api");
+
+});
+
+Route::group(['prefix' => 'committee/', 'as' => 'committee.', 'middleware' => ['auth', 'can:level1']], function() {
+    Route::get("/", [CommitteeController::class, "show"])->name("show");
+
+    Route::post("/add/new/committee", [CommitteeController::class, "store"])->name("store");
+
+    Route::post("/delete/committee", [CommitteeController::class, "destroy"])->name("destroy");
 
 });
 

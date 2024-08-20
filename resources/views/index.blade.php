@@ -77,8 +77,6 @@
                     </thead>
                     <tbody>
                         @foreach($elections as $e)
-                            
-                        @endforeach
                         <tr>
                             <td>{{ $e->title }}</td>
                             @if($e->scope == 1) 
@@ -86,7 +84,7 @@
                             @elseif($e->scope == 2)
                                 <td>{{ $e->college_name }}</td>
                             @else
-                                <td>{{ $e->course_name }}</td>
+                                <td>{{ $e->course_name }} - {{ ordinal($e->year_level_limit) }} Year</td>
                             @endif
                             <td>0</td>
                             <td>
@@ -95,6 +93,8 @@
                                 </a>
                             </td>
                         </tr>
+                            
+                        @endforeach
                     </tbody>
                 </table>
             </div>

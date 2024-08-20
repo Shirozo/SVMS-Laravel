@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Election;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,12 +43,20 @@ class AppServiceProvider extends ServiceProvider
             if ($user->user_type == 2 || $user->user_type == 1) {
                 return true;
             } else {
-                return false ;
+                return false;
             }
         });
 
         Gate::define("level3", function (User $user): bool {
             return true;
+        });
+
+        Gate::define("level3Only", function (User $user): bool {
+            if ($user->user_type == 3) {
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 }

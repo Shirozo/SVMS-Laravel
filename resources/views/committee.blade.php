@@ -1,11 +1,11 @@
 @extends('base.base')
 
 @section('page_name')
-    Courses
+    Committee
 @endsection
 
 @section('title')
-    Courses
+    Committee
 @endsection
 
 
@@ -15,25 +15,31 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header with-border">
-                        <a href="#addcourse" data-toggle="modal" class="btn btn-success btn-sm btn-flat">
-                            <i class="fa fa-plus"></i> Add Course
-                        </a>
+                        <a href="#addnew" data-toggle="modal" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus"></i>
+                            Add New</a>
                     </div>
                     <div class="box-body">
                         <table id="example1" class="table table-bordered table-hover table-striped">
                             <thead style="background-color: #222D32; color:white;">
-                                <th>Course</th>
-                                <th>Enrolled Student</th>
+                                <th>Fullname</th>
+                                <th>Scope</th>
+                                <th>Username</th>
                                 <th>Action</th>
                             </thead>
                             <tbody>
-                                @foreach ($courses as $course)
+                                @foreach ($committee as $c)
                                     <tr>
-                                        <td>{{ $course->course_name }}</td>
-                                        <td>{{ $course->count }}</td>
+                                        <td>{{ $c->fullname }}</td>
+                                        @if ($c->ssc == 1)
+                                            <td>SSC</td>
+                                        @else
+                                            <td>{{ $c->college_name }}</td>
+                                        @endif
+                                        <td>{{ $c->username }}</td>
                                         <td>
-                                            <a href="#deletecourse" data-toggle="modal" data-id="{{ $course->id }}"
-                                                data-name="{{ $course->course_name }}" class="btn delete btn-danger btn-sm btn-flat">
+                                            <a href="#deleteCom" data-toggle="modal" data-id="{{ $c->id }}"
+                                                data-name="{{ $c->fullname }}"
+                                                class="btn delete btn-danger btn-sm btn-flat">
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         </td>
@@ -49,47 +55,81 @@
 @endsection
 
 @section('modal')
-    <div class="modal fade" id="addcourse">
+    <div class="modal fade" id="addnew">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title"><b>Add New Course</b></h4>
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title"><b>Add New Electoral Committee</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="{{ route('courses.store') }}" method="POST">
+                    <form class="form-horizontal" method="POST" action="{{ route('committee.store') }}">
                         @csrf
                         <div class="modal-body">
-                            {{-- *: Important Field Blueprint --}}
+
                             <div class="form-group has-feedback">
-                                <label for="course">Course:</label>
-                                <input type="text" name="course" id="course" class="form-control" required>
-                                @error('course')
-                                    <span class="text-danger"> {{ $message }} </span>
+                                <label for="user_id">Fullname: </label>
+                                <select name="user_id" id="user_id" class="form-control" required></select>
+                                @error('user_id')
+                                    <span class="text-danger"></span>
                                 @enderror
                             </div>
+
                             <div class="form-group has-feedback">
-                                <label for="college">College:</label>
-                                <select name="college" id="college" class="form-control" required>
-                                    <option value="" selected>------</option>
-                                    @foreach ($colleges as  $college)
-                                        <option value="{{$college->id}}">{{$college->college_name}}</option>
+                                <label for="id_username">Username:</label>
+                                <input type="text" name="username" class="form-control" required="" id="id_username">
+                                @error('username')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <label for="id_password">Password:</label>
+                                <input type="password" name="password" class="form-control" required="" id="id_password">
+                                @error('password')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+
+
+                            <div class="form-group has-feedback">
+                                <label for="id_ssc">Ssc:</label>
+                                <select name="ssc" class="form-control" required="" id="id_ssc">
+                                    <option value="" selected="">---------</option>
+
+                                    <option value="1">Yes</option>
+
+                                    <option value="0">No</option>
+
+                                </select>
+                                @error('ssc')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group has-feedback" id="scope_holder">
+                                <span class="text-danger"></span>   
+                                <label for="id_scope">Scope:</label>
+                                <select name="scope" class="form-control" id="id_scope" style="display: block;">
+                                    <option value="" selected="">---------</option>
+                                    @foreach ($colleges as $c)
+                                        <option value="{{ $c->id }}">{{ $c->college_name }}</option>
                                     @endforeach
                                 </select>
-                                @error('college')
-                                    <span class="text-danger"> {{ $message }} </span>
+                                @error('scope')
+                                    <span class="text-danger"></span>
                                 @enderror
                             </div>
+
+
+
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal">
-                                <i class="fa fa-close"></i> Close
-                            </button>
-                            <button type="submit" class="btn btn-success btn-flat" name="add">
-                                <i class="fa fa-save"></i> Save
-                            </button>
+                            <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i
+                                    class="fa fa-close"></i> Close</button>
+                            <button type="submit" class="btn btn-success btn-flat" name="add" onclick="enableForm()"><i
+                                    class="fa fa-save"></i> Save</button>
                         </div>
                     </form>
                 </div>
@@ -97,31 +137,31 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deletecourse">
+    <div class="modal fade" id="deleteCom">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title"><b>Delete Course</b></h4>
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><b>Deleting...</b></h4>
                 </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('courses.destroy') }}">
+                <form class="form-horizontal" method="POST" action="{{ route('committee.destroy') }}">
+                    <div class="modal-body">
+                        <input type="hidden" class="id" name="id">
                         @csrf
-                        @method('delete')
-                        <div class="modal-body">
-                            <p class="text-center"><b style="font-size: 20px" id="del-text"></b></p>
-                            <input type="hidden" name="course_del" id="course_del">
+                        <div class="text-center">
+                            <p>DELETE COMMITTEE</p>
+                            <h2 class="bold fullname"></h2>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-flat pull-left" data-dismiss="modal"><i
-                                    class="fa fa-close"></i> Close</button>
-                            <button type="submit" class="btn btn-success btn-flat" name="add"><i
-                                    class="fa fa-save"></i> Yes</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-flat pull-left" data-dismiss="modal"><i
+                                class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-danger btn-flat" name="delete"><i
+                                class="fa fa-trash"></i>
+                            Delete</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -131,13 +171,46 @@
 @section('custom_script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            $(".delete").on('click', function(e) {
-                e.preventDefault()
-                var data = $(this).data('id')
-                var name = $(this).data('name')
+            $("#scope_holder").css("display", "none")
+            $("#id_username").attr("disabled", false)
+            $("#id_password").attr("disabled", false)
 
-                $("#del-text").html(`Are you sure you want to delete <i>${name.toUpperCase()}</i>?`)
-                $("#course_del").val(data)
+            $(function() {
+
+                $(document).on('click', '.delete', function(e) {
+                    e.preventDefault();
+                    var id = $(this).data('id');
+                    $(".id").val(id)
+                });
+
+                $(document).on("change", "#id_ssc", function(e) {
+                    if ($("#id_ssc").val() === "0") {
+                        $("#scope_holder").css("display", "block")
+                    } else {
+                        $("#scope_holder").css("display", "none")
+                    }
+                })
+            });
+
+            $("#user_id").select2({
+                width: "100%",
+                placeholder: "Select Committee...",
+                minimumInputLength: 1,
+                ajax: {
+                    url: '{{ route('voters.find') }}',
+                    dataType: 'json',
+                    data: function(params) {
+                        return {
+                            q: $.trim(params.term)
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: data
+                        };
+                    },
+                    cache: true
+                }
             })
         })
     </script>

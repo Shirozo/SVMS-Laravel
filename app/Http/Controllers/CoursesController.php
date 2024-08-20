@@ -17,9 +17,13 @@ class CoursesController extends Controller
 
         $courses = DB::table('courses')
             ->select(DB::raw("courses.id, courses.course_name, COUNT(users.id) AS count"))
-            ->leftJoin("users", "courses.id", "=", "users.course_id")
-            ->groupBy("courses.id", "courses.course_name")
+            ->leftJoin('users', function ($join) {
+                $join->on('courses.id', '=', 'users.course_id')
+                    ->where('users.user_type', '=', 3); // Filtering users with user_type = 3
+            })
+            ->groupBy('courses.id', 'courses.course_name')
             ->get();
+
         $colleges = College::all();
         return view('courses', [
             "courses" => $courses,
@@ -59,7 +63,8 @@ class CoursesController extends Controller
         }
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
 
         $course_id = $request->course_del;
         $course_data = Course::find($course_id);
@@ -68,12 +73,10 @@ class CoursesController extends Controller
             $course_data->delete();
 
             toastr("Course Deleted!", Type::SUCCESS);
-        }
-        else {
+        } else {
             toastr("Course not found!", Type::ERROR);
         }
 
         return redirect()->route('courses.index');
-
     }
 }

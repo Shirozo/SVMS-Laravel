@@ -18,7 +18,10 @@ class CollegeController extends Controller
         $colleges = DB::table("colleges")
             ->select(DB::raw("colleges.id, colleges.college_name, COUNT(users.id) AS count"))
             ->leftJoin("courses", "colleges.id", "=", "courses.college_id")
-            ->leftJoin("users", "users.course_id", "=", "courses.id")
+            ->leftJoin("users", function ($join) {
+                $join->on("users.course_id", "=", "courses.id")
+                    ->where("users.user_type", "=", 3); // Filtering users with user_type = 3
+            })
             ->groupBy("colleges.id", "colleges.college_name")
             ->get();
 

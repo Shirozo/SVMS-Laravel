@@ -21,17 +21,34 @@ class VoterController extends Controller
     public function index()
     {
 
-        // TODO: Change voters to custom query
-        $voters = DB::table("users")
-            ->select(DB::raw("users.id,
+        if (Auth::user()->user_type == 1) {
+            $voters = DB::table("users")
+                ->select(DB::raw("users.id,
+                    users.username,
+                    users.year,
+                    courses.course_name, colleges.college_name,
+                    CONCAT(users.last_name, ', ', users.first_name, ' ' , users.middle_name) AS fullname "))
+                ->join("courses", "users.course_id", "=", "courses.id")
+                ->join("colleges", "courses.college_id", "colleges.id")
+                ->where('users.user_type', "=", "3")
+                ->get();
+        } else {
+            $courseSubquery = DB::table('courses')
+                ->select('id')
+                ->where('college_id', Auth::user()->scope);
+
+            $voters = DB::table("users")
+                ->select(DB::raw("users.id,
                 users.username,
                 users.year,
                 courses.course_name, colleges.college_name,
                 CONCAT(users.last_name, ', ', users.first_name, ' ' , users.middle_name) AS fullname "))
-            ->join("courses", "users.course_id", "=", "courses.id")
-            ->join("colleges", "courses.college_id", "colleges.id")
-            ->where('users.user_type', "!=", "1")
-            ->get();
+                ->join("courses", "users.course_id", "=", "courses.id")
+                ->join("colleges", "courses.college_id", "colleges.id")
+                ->where('users.user_type', "=", "3")
+                ->whereIn("course_id", $courseSubquery)
+                ->get();
+        }
 
         $courses = Course::all();
 
@@ -251,7 +268,7 @@ class VoterController extends Controller
                 $folderPath = 'uploads/' . $r_path;
 
                 $folderFullPath = resource_path($folderPath);
-                
+
                 if (File::exists($folderFullPath)) {
                     // Create the folder
                     File::deleteDirectory($folderFullPath);

@@ -11,6 +11,7 @@ use App\Models\Position;
 use App\Models\User;
 use Flasher\Prime\Notification\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,17 +22,63 @@ class ElectionsController extends Controller
         $colleges = College::all();
         $courses = Course::all();
 
-        $elections = DB::table('elections')
-            ->select(DB::raw("elections.id,
-                elections.title,
-                elections.scope,
-                elections.started,
-                elections.year_level_limit,
-                colleges.college_name AS college_limit,
-                courses.course_name AS course_limit"))
-            ->leftJoin("courses", "courses.id", "=", "elections.course_limit")
-            ->leftJoin("colleges", "colleges.id", "=", "elections.college_limit")
-            ->get();
+        if (Auth::user()->user_type == 1) {
+            $elections = DB::table("elections as e")
+                ->select(DB::raw("e.id,
+                e.title,
+                e.scope,
+                e.started,
+                e.college_limit,
+                e.course_limit,
+                e.year_level_limit,
+                c.college_name,
+                cs.course_name"))
+                ->leftJoin("colleges as c", "e.college_limit", "=", "c.id")
+                ->leftJoin("courses as cs", "e.course_limit", "=", "cs.id")
+                ->get();
+        } else {
+            if (Auth::user()->ssc) {
+                $elections = DB::table("elections as e")
+                    ->select(DB::raw("e.id,
+                    e.title,
+                    e.scope,
+                    e.started,
+                    e.college_limit,
+                    e.course_limit,
+                    e.year_level_limit,
+                    c.college_name,
+                    cs.course_name"))
+                    ->leftJoin("colleges as c", "e.college_limit", "=", "c.id")
+                    ->leftJoin("courses as cs", "e.course_limit", "=", "cs.id")
+                    ->where(
+                        [
+                            ["scope", "=", "1"],
+                        ]
+                    )
+                    ->get();
+            } else {
+
+                $courseSubquery = DB::table('courses')
+                    ->select('id')
+                    ->where('college_id', Auth::user()->scope);
+
+                $elections = Election::select(
+                    'elections.id',
+                    'elections.title',
+                    'elections.scope',
+                    'elections.started',
+                    'elections.college_limit',
+                    'elections.course_limit',
+                    'c.college_name',
+                    'cs.course_name',
+                    'elections.year_level_limit')
+                    ->leftJoin('colleges as c', 'elections.college_limit', '=', 'c.id')
+                    ->leftJoin('courses as cs', 'elections.course_limit', '=', 'cs.id')
+                    ->where('elections.college_limit', Auth::user()->scope)
+                    ->orWhereIn('elections.course_limit', $courseSubquery)
+                    ->get();
+            }
+        }
 
         return view('elections', [
             "elections" => $elections,
@@ -163,7 +210,6 @@ class ElectionsController extends Controller
             } else {
                 toastr("Invalid Action!", Type::ERROR);
             }
-
         } else {
             toastr("Election Don't Exist!", Type::ERROR);
         }
@@ -173,7 +219,8 @@ class ElectionsController extends Controller
         return redirect()->route("elections.index");
     }
 
-    public function find(Request $request) {
+    public function find(Request $request)
+    {
         $term = trim($request->q);
 
         if (empty($term)) {
@@ -181,7 +228,7 @@ class ElectionsController extends Controller
         }
 
         $datas = ElectionData::search($term)->limit(5)->get();
-        
+
         $formatted_data = [];
 
         foreach ($datas as $data) {
@@ -189,7 +236,5 @@ class ElectionsController extends Controller
         }
 
         return response()->json($formatted_data);
-
     }
-
 }

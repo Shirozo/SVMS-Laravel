@@ -89,6 +89,7 @@
                                 <label for="exclusive">Choose Yes if it is a exclusive for certain College or Course:
                                 </label>
                                 <select type="text" name="exclusive" id="exclusive" required class="form-control">
+                                    <option value="" selected>----</option>
                                     <option value="1">Yes</option>
                                     <option value="0" selected>No</option>
                                 </select>
