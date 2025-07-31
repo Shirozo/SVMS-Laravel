@@ -289,7 +289,7 @@
                                     required>
                                     <option value="" selected>---------</option>
                                     @foreach ($courses as $c)
-                                        <option value="{{ $c->id }}">{{ $course->course_name }}</option>
+                                        <option value="{{ $c->id }}">{{ $c->course_name }}</option>
                                     @endforeach
                                 </select>
                                 @error('edit_course')
