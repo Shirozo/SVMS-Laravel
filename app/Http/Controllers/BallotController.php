@@ -28,10 +28,17 @@ class BallotController extends Controller
             )
             ->first();
 
-        if ($data == null) {
+        
+        if (Auth::user()->user_type == 3 && $data == null) {
             toastr("Not Allowed!!", Type::ERROR);
             return redirect()->route("ballot.voter");
         }
+
+        $is_voter = false;
+        if (Auth::user()->user_type == 3) {
+            $is_voter = true;
+        }
+                    
 
         $new_data = [];
         $max_vote = [];
@@ -122,6 +129,7 @@ class BallotController extends Controller
             "candidates" => $new_data,
             "max_vote" => $max_vote,
             "election" => $election,
+            "is_voter" => $is_voter
         ]);
     }
 
