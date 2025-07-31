@@ -200,11 +200,11 @@
                     <h4 class="modal-title"><b>Update Candidate Information </b></h4>
                 </div>
                 <form class="form-horizontal" method="POST" enctype="multipart/form-data"
-                    action="{{ route('candidate.store', ['id' => $election->id]) }}">
+                    action="{{ route('candidate.update', ['id' => $election->id]) }}">
                     <div class="modal-body">
                         @csrf
                         <div class="modal-body">
-                            <input disabled type="hidden" name="edit_id" id="edit_id" class="form-control" required />
+                            <input type="hidden" name="edit_id" id="edit_id" class="form-control" required />
                             <div class="form-group has-feedback">
                                 <label for="edit_fullname">Fullname: </label>
                                 <input disabled name="edit_fullname" id="edit_fullname" class="form-control" required />
@@ -391,7 +391,7 @@
                 id = $(this).data('id')
                 $("#edit_fullname").val(name)
                 $("#edit_id").val(id)
-                getCandidate()
+                getCandidate(id)
             })
 
 
@@ -528,7 +528,7 @@
                     type: 'GET',
                     url: "{{ route('candidate.api') }}",
                     data: {
-                        id: 1
+                        id: id
                     },
                     success: function(response) {
                         $("#edit_bio").val(response.data.bio)
