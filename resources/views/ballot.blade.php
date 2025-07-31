@@ -50,60 +50,59 @@
                 @csrf
                 <input type="hidden" name="elid" id="elid" value="{{ $election->id }}">
                 @foreach ($candidates as $key => $value)
-                    <div class="candidate-container">
-                        <h3>{{ $key }}</h3>
-                        <div class="candidate-body">
-                            @if ($max_vote[$key] == 1)
-                                @foreach ($value as $v)
-                                    <div class="candidate">
-                                        <label for="{{ $key }}-{{ $v['c_id'] }}">
-                                            <input type="radio" name="{{ $key }}" required
-                                                id="{{ $key }}-{{ $v['c_id'] }}"
-                                                value="{{ $v['c_id'] }}">{{ $v['c_name'] }}
-                                        </label>
-                                        <i class="fa fa-circle-info info" data-id="{{ $v['c_id'] }}"></i>
-                                    </div>
-                                @endforeach
-                            @else
-                                @foreach ($value as $v)
-                                    <div class="candidate">
-                                        <label for="{{ $key }}-{{ $v['c_id'] }}">
-                                            <input type="checkbox" name="{{ $key }}[]"
-                                                id="{{ $key }}-{{ $v['c_id'] }}"
-                                                value="{{ $v['c_id'] }}">{{ $v['c_name'] }}
-                                        </label>
-                                        <i class="fa fa-circle-info info" data-id="{{ $v['c_id'] }}"></i>
-                                    </div>
-                                @endforeach
-                                <script>
-                                    document.querySelectorAll('input[name="{{ $key }}[]"]').forEach(function(checkbox) {
-                                        checkbox.addEventListener('click', function() {
-                                            console.log("hello world");
-
-                                            var checkedCheckboxes = document.querySelectorAll(
-                                                'input[name="{{ $key }}[]"]:checked');
-
-                                            var disableOthers = checkedCheckboxes.length >= +`{{ $max_vote[$key] }}`;
-
-                                            document.querySelectorAll('input[name="{{ $key }}[]"]').forEach(function(cb) {
-                                                if (!cb.checked) {
-                                                    cb.disabled = disableOthers;
-                                                }
-                                            });
-                                        });
-                                    });
-                                </script>
-                            @endif
+                <div class="candidate-container">
+                    <h3>{{ $key }}</h3>
+                    <div class="candidate-body">
+                        @if ($max_vote[$key] == 1)
+                        @foreach ($value as $v)
+                        <div class="candidate">
+                            <label for="{{ $key }}-{{ $v['c_id'] }}">
+                                <input type="radio" name="{{ $key }}" required id="{{ $key }}-{{ $v['c_id'] }}" value="{{ $v['c_id'] }}">{{ $v['c_name'] }}
+                            </label>
+                            <i class="fa fa-circle-info info" data-id="{{ $v['c_id'] }}"></i>
                         </div>
+                        @endforeach
+                        @else
+                        @foreach ($value as $v)
+                        <div class="candidate">
+                            <label for="{{ $key }}-{{ $v['c_id'] }}">
+                                <input type="checkbox" name="{{ $key }}[]" id="{{ $key }}-{{ $v['c_id'] }}" value="{{ $v['c_id'] }}">{{ $v['c_name'] }}
+                            </label>
+                            <i class="fa fa-circle-info info" data-id="{{ $v['c_id'] }}"></i>
+                        </div>
+                        @endforeach
+                        <script>
+                            document.querySelectorAll('input[name="{{ $key }}[]"]').forEach(function(checkbox) {
+                                checkbox.addEventListener('click', function() {
+                                    console.log("hello world");
+
+                                    var checkedCheckboxes = document.querySelectorAll(
+                                        'input[name="{{ $key }}[]"]:checked');
+
+                                    var disableOthers = checkedCheckboxes.length >= +`{{ $max_vote[$key] }}`;
+
+                                    document.querySelectorAll('input[name="{{ $key }}[]"]').forEach(function(cb) {
+                                        if (!cb.checked) {
+                                            cb.disabled = disableOthers;
+                                        }
+                                    });
+                                });
+                            });
+
+                        </script>
+                        @endif
                     </div>
+                </div>
                 @endforeach
                 <hr>
+                @if($is_voter)
                 <div class="ballot-footer">
                     <input type="checkbox" id="confirmed" name="confirmed" required>
                     <p>I agree that all the contents above are correct.</p>
                     <br>
                     <button class="btn btn-success btn-sm" type="submit"> Cast Vote!</button>
                 </div>
+                @endif
             </form>
         </div>
     </div>
@@ -112,6 +111,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {});
+
     </script>
 
 
