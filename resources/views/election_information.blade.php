@@ -169,13 +169,15 @@
                                     <span class="text-danger"></span>
                                 @enderror
                             </div>
-                            <div class="form-group has-feedback">
+
+                            {{-- ! FOR FUTURE FEATURE --}}
+                            {{-- <div class="form-group has-feedback">
                                 <label for="photo">Photo: </label>
                                 <input type="file" accept="image/*" name="photo" id="photo" required></input>
                                 @error('photo')
                                     <span class="text-danger"></span>
                                 @enderror
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer">
