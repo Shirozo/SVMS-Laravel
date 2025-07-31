@@ -16,7 +16,7 @@
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>Voters</h3>
-                        <p>No. of Count</p>
+                        <p>No. of Count: {{ $voters->count() }}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-users"></i>
@@ -38,7 +38,7 @@
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3>Voted</h3>
-                        <p>No. of Count</p>
+                        <p>No. of Count: {{ $voted->count() }}</p>
                     </div>
                     <div class="icon">
                         <i class="fa fa-check"></i>
