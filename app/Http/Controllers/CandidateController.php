@@ -105,4 +105,21 @@ class CandidateController extends Controller
         return redirect()->route("elections.show", ["id" => $id]);
 
     }
+
+    public function api(Request $request)
+    {
+        $id = $request->id;
+        $data = Candidate::find($id);
+
+        if ($data != null) {
+            return response()->json([
+                "data" => $data
+            ], 200);
+        }
+
+        return response()->json([
+            "message" => "Unkown Candidate!",
+        ], 404);
+    }
+
 }
