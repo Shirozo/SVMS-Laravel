@@ -86,6 +86,40 @@ class CandidateController extends Controller
         return redirect()->back()->withErrors($valid_data);
     }
 
+    public function update(Request $request)
+    {
+
+        $valid = Validator::make($request->all(), [
+            "edit_id" => "required",
+            "edit_bio" => 'required',
+            "edit_position" => 'required|numeric',
+        ]);
+
+        if ($valid->fails()) {
+            toastr("Form Validation Error", Type::ERROR);
+            dump($valid);
+            return redirect()->back()->withErrors($valid);
+        }
+
+        $id = $request->edit_id;
+
+        $past_data = Candidate::find($id);
+
+        if ($past_data != null) {
+            $past_data->update([
+                "bio" => $request->edit_bio,
+                "position" => $request->edit_position,
+            ]);
+
+            toastr("Candidate Updated!", Type::SUCCESS);
+            return redirect()->route("elections.show", ["id" => $past_data->election_id]);
+        }
+        else {
+            toastr("Candidate Doesn't Exist", Type::ERROR);
+            return redirect()->back()->withErrors($valid);
+        }
+    }
+
     public function destroy($id, Request $request)
     {
         if ($request->has("del_id")) {
