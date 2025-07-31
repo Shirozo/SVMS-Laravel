@@ -98,6 +98,11 @@ class ElectionsController extends Controller
 
         $voters = ElectionData::where("election_id", "=", $id)->get();
 
+        $voted = ElectionData::where([
+            ["election_id", "=", $id],
+            ["has_voted", "=", 1]
+        ])->get();
+
         $positions = Position::all();
 
         $candidates = DB::table("candidates")
@@ -111,7 +116,8 @@ class ElectionsController extends Controller
             "election" => $election,
             "voters" => $voters,
             "positions" => $positions,
-            "candidates" => $candidates
+            "candidates" => $candidates,
+            "voted" => $voted
         ]);
     }
 
