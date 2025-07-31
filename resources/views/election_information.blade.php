@@ -77,7 +77,7 @@
                                         <td>{{ $candidate->fullname }}</td>
                                         <td>{{ $candidate->position_name }}</td>
                                         <td>
-                                            <a href="#" data-toggle="modal" class="btn btn-primary btn-flat btn-sm"
+                                            <a href="#editCandidate" data-toggle="modal" class="btn edit btn-primary btn-flat btn-sm"
                                                 data-id="{{ $candidate->id }}" data-name="{{ $candidate->fullname }}">
                                                 <i class="fa fa-pen-to-square"></i> Edit
                                             </a>
@@ -185,6 +185,67 @@
                                 class="fa fa-close"></i> Close</button>
                         <button type="submit" class="btn btn-success btn-flat"><i class="fa fa-plus"></i>
                             Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editCandidate" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><b>Update Candidate Information </b></h4>
+                </div>
+                <form class="form-horizontal" method="POST" enctype="multipart/form-data"
+                    action="{{ route('candidate.store', ['id' => $election->id]) }}">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="modal-body">
+                            <input disabled type="hidden" name="edit_id" id="edit_id" class="form-control" required />
+                            <div class="form-group has-feedback">
+                                <label for="edit_fullname">Fullname: </label>
+                                <input disabled name="edit_fullname" id="edit_fullname" class="form-control" required />
+        
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_bio">Bio: </label>
+                                <textarea style="min-height: 100px" type="text" name="edit_bio" id="edit_bio" class="form-control" required
+                                    placeholder="Candidate Bio"></textarea>
+                                @error('edit_bio')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+                            <div class="form-group has-feedback">
+                                <label for="edit_position">Position: </label>
+                                <select name="edit_position" id="edit_position" class="form-control" required>
+                                    <option value="" selected> Position</option>
+                                    @foreach ($positions as $position)
+                                        <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('edit_position')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div>
+
+                            {{-- ! FOR FUTURE FEATURE --}}
+                            {{-- <div class="form-group has-feedback">
+                                <label for="photo">Photo: </label>
+                                <input type="file" accept="image/*" name="photo" id="photo" required></input>
+                                @error('photo')
+                                    <span class="text-danger"></span>
+                                @enderror
+                            </div> --}}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-flat" data-dismiss="modal"><i
+                                class="fa fa-close"></i> Close</button>
+                        <button type="submit" class="btn btn-success btn-flat"><i class="fa fa-plus"></i>
+                            Update</button>
                     </div>
                 </form>
             </div>
@@ -324,6 +385,15 @@
                 $("#voter-name").html(`Are you sure you want to DELETE` + " " + `<i>${name}</i>?`)
             })
 
+            $(".edit").on("click", function(e) {
+                e.preventDefault()
+                name = $(this).data('name')
+                id = $(this).data('id')
+                $("#edit_fullname").val(name)
+                $("#edit_id").val(id)
+                getCandidate()
+            })
+
 
             $("#addVoterElection").on("submit", function(e) {
                 e.preventDefault();
@@ -453,20 +523,16 @@
                 }
             })
 
-            function getVoters(id) {
+            function getCandidate(id) {
                 $.ajax({
-                    type: 'POST',
-                    url: "{{ route('elections.register') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
+                    type: 'GET',
+                    url: "{{ route('candidate.api') }}",
                     data: {
-                        election_id: 1
+                        id: 1
                     },
                     success: function(response) {
-                        $("#progress-bar").css("width", "2%")
-                        $("#ajax_return").html(response.message)
-                        createBatch(response)
+                        $("#edit_bio").val(response.data.bio)
+                        $("#edit_position").val(response.data.position_id   )
                     },
                     error: function(xhr, status, error) {
                         console.error(xhr.responseText);
