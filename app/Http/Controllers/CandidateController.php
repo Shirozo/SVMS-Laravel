@@ -21,7 +21,6 @@ class CandidateController extends Controller
             "user_id" => "required|numeric",
             "bio" => "required",
             "position" => "required|numeric",
-            "photo" => "required|image"
         ]);
 
         if ($valid_data->fails()) {
@@ -52,25 +51,27 @@ class CandidateController extends Controller
                 return redirect()->back()->withErrors($valid_data);
             }
 
-            $folder = "candidates/" . $election->title . '-' . $election->id;
+            // ! Image are for future feautre. Disabled for now
 
-            $fullPath = resource_path($folder);
+            // $folder = "candidates/" . $election->title . '-' . $election->id;
 
-            if (!File::exists($fullPath)) {
-                File::makeDirectory($fullPath, 0775, true);
-            }
+            // $fullPath = resource_path($folder);
 
-            $position = Position::select('name')->find($request->position);
+            // if (!File::exists($fullPath)) {
+            //     File::makeDirectory($fullPath, 0775, true);
+            // }
 
-            $ext = $request->file('photo')->extension();
+            // $position = Position::select('name')->find($request->position);
 
-            $filename = $position->name . $request->user_id . '.' . $ext;
+            // $ext = $request->file('photo')->extension();
 
-            $request->file("photo")->move($fullPath, $filename);
+            // $filename = $position->name . $request->user_id . '.' . $ext;
+
+            // $request->file("photo")->move($fullPath, $filename);
 
             Candidate::create([
                 "fullname" => $user->voter_name,
-                "photo" => $filename,
+                "photo" => null,
                 "bio" => $request->bio,
                 "user_id" => $request->user_id,
                 "position_id" => $request->position,
