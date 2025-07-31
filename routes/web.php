@@ -108,6 +108,8 @@ Route::group(['prefix' => 'candidate/', 'as' => 'candidate.', 'middleware' => ['
     Route::delete('/delete/election/id/{id}', [CandidateController::class, "destroy"])->name("destroy");
 
     Route::get('/api', [CandidateController::class, "api"])->name("api");
+
+    Route::post('/update/id/{id}', [CandidateController::class, "update"])->name("update");
 });
 
 Route::group(['prefix' => 'ballot/', 'as' => 'ballot.', 'middleware' => ['auth', 'can:level3']], function () {
